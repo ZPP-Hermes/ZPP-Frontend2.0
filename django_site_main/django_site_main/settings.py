@@ -2,14 +2,19 @@
 Django settings for django_site_main project.
 """
 
-from os import path
+from os import path, environ 
 PROJECT_ROOT = path.dirname(path.abspath(path.dirname(__file__)))
 
-DEBUG = True
+
+if environ.get('PRODUCTION', default='0') == '1':
+    DEBUG = False
+else:
+    DEBUG = True
+
 TEMPLATE_DEBUG = DEBUG
 
 ALLOWED_HOSTS = (
-    'localhost',
+    'zpptestvm.cloudapp.net',
 )
 
 ADMINS = (
@@ -18,14 +23,22 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
+#'default': {
+ #       'ENGINE': 'django.db.backends.sqlite3',
+#        'NAME': path.join(PROJECT_ROOT, 'db.sqlite3'),
+#       'USER': '',
+#       'PASSWORD': '',
+#        'HOST': '',
+#        'PORT': '',
+#    }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': path.join(PROJECT_ROOT, 'db.sqlite3'),
-        'USER': '',
-        'PASSWORD': '',
-        'HOST': '',
-        'PORT': '',
+        'NAME': 'django_db',
+        'ENGINE': 'sql_server.pyodbc',
+        'HOST': 'zpptestvm',
+        'USER': 'admin',
+        'PASSWORD': 'admin',
     }
 }
 
@@ -38,7 +51,7 @@ LOGIN_URL = '/login'
 # timezone as the operating system.
 # If running in a Windows environment this must be set to the same as your
 # system time zone.
-TIME_ZONE = 'America/Chicago'
+TIME_ZONE = 'Europe/Warsaw'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
