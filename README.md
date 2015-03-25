@@ -8,7 +8,7 @@ ustawianie pythona:
 6.  pip install django-pyodbc-azure
 
 pip freeze
-'''
+```
 Django==1.7.7
 South==1.0.2
 django-oauth-plus==2.2.6
@@ -17,4 +17,4 @@ httplib2==0.9
 oauth2==1.5.211
 pyodbc==3.0.7
 requests==2.6.0
-'''
+```
