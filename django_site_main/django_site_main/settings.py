@@ -6,7 +6,7 @@ from os import path, environ
 PROJECT_ROOT = path.dirname(path.abspath(path.dirname(__file__)))
 
 
-if environ.get('PRODUCTION', default='0') == '1':
+if environ.get('PRODUCTION','0') == '1':
     DEBUG = False
 else:
     DEBUG = True

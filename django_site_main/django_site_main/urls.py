@@ -16,6 +16,8 @@ urlpatterns = patterns('',
     url(r'^$', 'app.views.home', name='home'),
     url(r'^contact$', 'app.views.contact', name='contact'),
     url(r'^about', 'app.views.about', name='about'),
+    url(r'^oauth_callback', 'app.views.oauth_callback', name='oauth'),
+    url(r'^oauth_init', 'app.views.oauth_init', name='oauth'),
     url(r'^login/$',
         'django.contrib.auth.views.login',
         {
