@@ -4,6 +4,8 @@
 django_site_main/static/*
 web.debug.config
 *.sqlite3
+*.pubxml
+.idea/
 
 # User-specific files
 *.suo
