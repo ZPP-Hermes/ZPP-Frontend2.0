@@ -3,9 +3,11 @@ Definition of views.
 """
 
 from django.shortcuts import render, redirect
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
 from datetime import datetime
+from django.core.urlresolvers import reverse
+from app.forms import GradesForm
 import urlparse
 import oauth2 as oauth
 import requests
@@ -13,43 +15,37 @@ import requests
 consumer = oauth.Consumer(key='uvTtX63RWFaCf9pAxdtT', secret='5Jn3t9KNVMvSCeBtREX3nCvcKAnL55UrJKbcTvxD')
 
 def home(request):
-    """Renders the home page."""
+
     assert isinstance(request, HttpRequest)
     return render(
         request,
         'app/index.html',
         context_instance = RequestContext(request,
         {
-            'title':'Home Page',
+            'title':'Strona domowa',
             'year':datetime.now().year,
         })
     )
 
-def contact(request):
-    """Renders the contact page."""
-    assert isinstance(request, HttpRequest)
-    return render(
-        request,
-        'app/contact.html',
-        context_instance = RequestContext(request,
-        {
-            'title':'Contact',
-            'message':'Your contact page.',
-            'year':datetime.now().year,
-        })
-    )
+def grades(request):
 
-def about(request):
-    """Renders the about page."""
     assert isinstance(request, HttpRequest)
+
+    if request.method == 'POST':
+        form = GradesForm(request.POST)
+        if form.is_valid():
+            # TODO
+            return HttpResponseRedirect(reverse('app:home'))
+
     return render(
         request,
-        'app/about.html',
+        'app/grades.html',
         context_instance = RequestContext(request,
         {
-            'title':'About',
-            'message':'Your application description page.',
+            'title':'Oceny',
+            'message':'Wprowadź dane',
             'year':datetime.now().year,
+            'gradesForm': GradesForm(),
         })
     )
 

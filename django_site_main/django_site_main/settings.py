@@ -34,11 +34,11 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'NAME': 'django_db',
-        'ENGINE': 'sql_server.pyodbc',
-        'HOST': 'zpptestvm',
-        'USER': 'admin',
-        'PASSWORD': 'admin',
+        'NAME': path.join(PROJECT_ROOT, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.sqlite3',#'sql_server.pyodbc',
+        'HOST': '',
+        'USER': '',
+        'PASSWORD': '',
     }
 }
 
@@ -144,10 +144,11 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'app',
+    'polls',
     # Uncomment the next line to enable the admin:
-    # 'django.contrib.admin',
+    'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
-    # 'django.contrib.admindocs',
+    'django.contrib.admindocs',
 )
 
 # A sample logging configuration. The only tangible logging
