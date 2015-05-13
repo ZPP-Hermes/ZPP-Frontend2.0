@@ -27,6 +27,19 @@ def home(request):
         })
     )
 
+def login(request):
+
+    assert isinstance(request, HttpRequest)
+    return render(
+        request,
+        'app/login.html',
+        context_instance = RequestContext(request,
+        {
+            'title':'Logowanie',
+            'year':datetime.now().year,
+        })
+    )
+
 def grades(request):
 
     assert isinstance(request, HttpRequest)
@@ -43,7 +56,7 @@ def grades(request):
         context_instance = RequestContext(request,
         {
             'title':'Oceny',
-            'message':'Wprowadź dane',
+            'message':'Wprowadz dane',
             'year':datetime.now().year,
             'gradesForm': GradesForm(),
         })
@@ -57,7 +70,7 @@ def oauth_init(request):
     oauth_request.sign_request(oauth.SignatureMethod_PLAINTEXT(), consumer, None)
     response = requests.get(request_token_url, headers=oauth_request.to_header())
     request_token = dict(urlparse.parse_qsl(response.content))
-    print request_token.values()
+    print(request_token.values())
     response = redirect('https://usosapps.uw.edu.pl/services/oauth/authorize?oauth_token=%s' % request_token['oauth_token'])
     response.set_cookie('oauth_request_secret', request_token['oauth_token_secret'])
     return response
@@ -75,7 +88,7 @@ def oauth_callback(request):
     #####################
     # dlaczego jest 401 unauthorized i message:"invalid consumer"
     ######################
-    print response.status_code
+    print(response.status_code)
     access_token = dict(urlparse.parse_qsl(response.content))
     raise Exception(response.content)
 
@@ -86,7 +99,7 @@ def oauth_callback(request):
     token = oauth.Token(access_token['oauth_token'], access_token['oauth_token_secret'])
     oauth_request = oauth.Request.from_consumer_and_token(consumer, http_url=resource_url)
     oauth_request.sign_request(oauth.SignatureMethod_PLAINTEXT(), consumer, None)
-    print oauth_request.viewkeys()
+    print(oauth_request.viewkeys())
 
     # get the resource
     #response = requests.get(resource_url, headers=oauth_request.to_header())
