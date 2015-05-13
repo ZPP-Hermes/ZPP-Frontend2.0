@@ -20,7 +20,8 @@ from django.utils.translation import ugettext_lazy as _
 
 class GradeField(forms.ChoiceField):
 
-    def __init__(self, choices=[(x, x) for x in range(2, 7)], required=True,
+    marks = [(0,'brak'), (4,'2'), (6,'3'), (7,'3.5'), (8,'4'), (9,'4.5'), (10,'5'), (11,'5!')]
+    def __init__(self, choices=marks, required=True,
                  widget=None, label=None, initial=None, help_text='', *args, **kwargs):
         super(ChoiceField, self).__init__(required=required, widget=widget, label=label,
                                         initial=initial, help_text=help_text, *args, **kwargs)
@@ -37,3 +38,13 @@ class GradesForm(forms.Form):
     grade8 = GradeField(label='Przedmiot 8')
     grade9 = GradeField(label='Przedmiot 9')
     grade10 = GradeField(label='Przedmiot 10')
+    grade11 = GradeField(label='Przedmiot 11')
+    grade12 = GradeField(label='Przedmiot 12')
+    grade13 = GradeField(label='Przedmiot 13')
+    grade14 = GradeField(label='Przedmiot 14')
+    grade15 = GradeField(label='Przedmiot 15')
+    grade16 = GradeField(label='Przedmiot 16')
+    grade17 = GradeField(label='Przedmiot 17')
+    grade18 = GradeField(label='Przedmiot 18')
+    grade19 = GradeField(label='Przedmiot 19')
+    grade20 = GradeField(label='Przedmiot 20')

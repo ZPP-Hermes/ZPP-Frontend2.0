@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 Definition of views.
 """
@@ -11,12 +12,34 @@ from app.forms import GradesForm
 import urlparse
 import oauth2 as oauth
 import requests
+import pyRserve
+import numpy as np
+from models import Mark
+import Rscripts
 
 consumer = oauth.Consumer(key='uvTtX63RWFaCf9pAxdtT', secret='5Jn3t9KNVMvSCeBtREX3nCvcKAnL55UrJKbcTvxD')
+#przygotowywanie skryptow R-owych
+conn = pyRserve.connect()
+conn.r(Rscripts.Rscript.arules)
+# tu będziemy chcieli wczytywać dane z bazy
+#conn.r.data = prepData()
+
+#funkcja bioraca dane z bazy i przerabiajaca na macierz do R, ja jeszcze trzeba przerobic
+def prepData():
+    dataPr = Mark.objects.all()
+    dataPr = dataPr.values_list()
+    colNum = len(dataPr[1])
+    dataList = []
+    for i in range(colNum):
+        dataList += [id[i] for id in dataPr]
+    dataR = np.array(dataList)
+    dataR.shape = (colNum,len(dataList)/colNum)
+    return dataR
 
 def home(request):
 
     assert isinstance(request, HttpRequest)
+
     return render(
         request,
         'app/index.html',
@@ -40,6 +63,8 @@ def login(request):
         })
     )
 
+#proponowaczka przedmiotow obieralnych, wybieramy pzredmioty z listy
+#i zapuszczany algorytm regułowy z R-a
 def grades(request):
 
     assert isinstance(request, HttpRequest)
@@ -47,8 +72,22 @@ def grades(request):
     if request.method == 'POST':
         form = GradesForm(request.POST)
         if form.is_valid():
-            # TODO
-            return HttpResponseRedirect(reverse('app:home'))
+            values = form.cleaned_data.values()
+            marks = []
+            for v in values:
+                marks += [int(v)]
+            conn.r.gotMarks = marks
+            gotSub = conn.r('which(gotMarks>0)')
+            recommendSubjects = conn.r('getRecomSub(which(gotMarks>0),0.5)')
+            return render(
+                request,
+                'app/gradesResult.html',
+                context_instance = RequestContext(request,
+                {
+                    'gotSub':gotSub,
+                    'recomSub':recommendSubjects,
+                })
+            )
 
     return render(
         request,
