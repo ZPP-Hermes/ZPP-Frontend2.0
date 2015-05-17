@@ -2,7 +2,7 @@
 class Rscript():
     arules = '''dir2 <- "~/ZPP/ZPP-SSDT/nowyskrypt/ZPP_dane.csv"
     dir <- paste(getwd(), "/ZPP_dane.csv", sep="")
-    data <- read.csv(dir2, sep=",")
+    data <- read.csv(dir, sep=",")
     trainingIdx = sample(1:nrow(data), round(3*(nrow(data)/5)))
     obow <- as.matrix(data[,1:30])
     obier <- as.matrix(data[,31:50])
@@ -11,7 +11,7 @@ class Rscript():
     #-----------reguly dla przedmiotow obieralnych---------------------
 
     #tworzenie koszykow przedmiotow obieralnych
-    install.packages('arules')
+    #install.packages('arules')
     library(arules)
 
     colnames(obier) <- NULL
