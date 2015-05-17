@@ -5,6 +5,9 @@ Definition of forms.
 from django import forms
 from django.forms import widgets, ChoiceField
 from django.utils.safestring import mark_safe
+from django.forms import ModelForm
+from django.forms.formsets import formset_factory
+from app.models import *
 from django.contrib.auth.forms import AuthenticationForm
 from django.utils.translation import ugettext_lazy as _
 
@@ -23,6 +26,15 @@ class HorizontalRadioRenderer(forms.RadioSelect.renderer):
     def render(self):
             return mark_safe(u'\n'.join([u'%s &nbsp; &nbsp;' % w for w in self]))
 
+
+class MarkForm(ModelForm):
+    class Meta:
+        model=Mark
+        fields=['mark', 'course']
+
+
+MarkFormSet = formset_factory(MarkForm, extra=1)
+"""
 class GradeField(forms.ChoiceField):
 
     marks = [(0,'brak'), (4,'2'), (6,'3'), (7,'3.5'), (8,'4'), (9,'4.5'), (10,'5'), (11,'5!')]
@@ -72,3 +84,5 @@ class GradesForm(forms.Form):
     przedmiot_ob_28 = GradeField(label='Przedmiot obowiazkowy 28')
     przedmiot_ob_29 = GradeField(label='Przedmiot obowiazkowy 29')
     przedmiot_ob_30 = GradeField(label='Przedmiot obowiazkowy 30')
+
+    """

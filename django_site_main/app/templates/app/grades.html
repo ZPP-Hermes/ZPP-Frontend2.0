@@ -1,14 +1,18 @@
 {% extends "app/layout.html" %}
 
 {% block content %}
+  {% if success %}
+  <h1>Wpisano do bazy</h1>
+  {% endif %}
 
 <h2>{{ title }}.</h2>
 <h3>{{ message }}</h3>
 
 <form action="{% url 'app:grades' %}" method="POST">
     {% csrf_token %}
-    <hr>
-    {{ gradesForm.as_p }}
+     <table>
+      {{ formset }}
+    </table>
     <input type="submit" value="Wyślij" />
 </form>
 
