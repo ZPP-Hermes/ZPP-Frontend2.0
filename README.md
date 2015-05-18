@@ -1,5 +1,5 @@
 uruchamianie pyRserve:
-1. ściągnij R
+1. ściągnij R \\
 2. ściągnij Rserve
 3. ściągnij pyRserve
 4. uruchom Rserve (uruchom R poleceniem R, następnie w interpreterze R uruchamiamy wpisujemy Rserve())
