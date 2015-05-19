@@ -4,6 +4,10 @@ from django.db import models
 
 class Student(models.Model):
     usos_id = models.CharField(max_length=250)
+#    models.OneToOneField('User', primary_key=True)
+#    courses=models.ManyToManyField(Course, through="Mark")
+    def __unicode__(self):
+        return self.usos_id
 
 
 # models.OneToOneField('User', primary_key=True)
@@ -18,7 +22,6 @@ class Course(models.Model):
     name = models.CharField(max_length=250)
     type = models.CharField(max_length=250, choices=TYPES)
     url = models.CharField(max_length=250, null=True)
-
     def __unicode__(self):
         return self.name
 
