@@ -16,6 +16,8 @@ Aby uruchomić aplikacje:
 
 1. instalujemy biblioteke arules, w R install.packages('arules')
 
+2. w Rscripts dopisujemy w pierwszej linii na zmienną dir2 sciezke do pliku z danymi
+
 ustawianie pythona:
 
 1.  python3.4 i pip (można przez MS web platform installer)
