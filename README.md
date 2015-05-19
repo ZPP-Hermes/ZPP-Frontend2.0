@@ -13,6 +13,7 @@ uruchamianie pyRserve:
 6. sprawdzamy czy działa: conn = pyRserve.connect()
 
 Aby uruchomić aplikacje:
+
 1. instalujemy biblioteke arules, w R install.packages('arules')
 
 ustawianie pythona:
