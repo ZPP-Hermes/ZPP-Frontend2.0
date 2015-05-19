@@ -1,10 +1,15 @@
 
 uruchamianie pyRserve:
 1. ściągnij R 
+
 2. ściągnij Rserve
+
 3. ściągnij pyRserve
+
 4. uruchom Rserve (uruchom R poleceniem R, następnie w interpreterze R uruchamiamy wpisujemy Rserve())
+
 5. W pythonie import pyRserve
+
 6. sprawdzamy czy działa: conn = pyRserve.connect()
 
 Aby uruchomić aplikacje:
