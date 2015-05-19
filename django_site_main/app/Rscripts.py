@@ -1,5 +1,6 @@
 # w tej klasie bedziemy przechowywac skrypty R-owe dla aplikacji
 class Rscript():
+    #robocze pobieranie danych z csv, na zmienną dir2 nalezy pobrac sciezke do danych
     arules = '''dir2 <- "~/ZPP/ZPP-SSDT/nowyskrypt/ZPP_dane.csv"
     dir <- paste(getwd(), "/ZPP_dane.csv", sep="")
     data <- read.csv(dir, sep=",")
@@ -11,7 +12,7 @@ class Rscript():
     #-----------reguly dla przedmiotow obieralnych---------------------
 
     #tworzenie koszykow przedmiotow obieralnych
-    #install.packages('arules')
+    install.packages('arules')
     library(arules)
 
     colnames(obier) <- NULL
