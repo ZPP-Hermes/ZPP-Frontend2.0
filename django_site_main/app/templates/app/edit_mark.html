@@ -1,0 +1,17 @@
+<div id="i_{{ i_id }}">
+  <h3>{{ name }}</h3>
+
+  <form id="f_i_{{ i_id }}" action="{% url 'app:commit_edit' i_id %}" method="post" class="form-horizontal">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Zatwierdź" class="btn btn-default"/>
+  </form>
+
+  {% if success %}
+    <div class="alert alert-success alert-dismissible" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+          aria-hidden="true">&times;</span></button>
+      Sukces
+    </div>
+  {% endif %}
+</div>

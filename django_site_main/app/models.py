@@ -17,7 +17,10 @@ class Course(models.Model):
     )
     name = models.CharField(max_length=250)
     type = models.CharField(max_length=250, choices=TYPES)
-    url = models.CharField(max_length=250)
+    url = models.CharField(max_length=250, null=True)
+
+    def __unicode__(self):
+        return self.name
 
 
 class Mark(models.Model):
@@ -44,6 +47,9 @@ class SavedMark(models.Model):
         (10, '5'),
         (11, '5!')
     )
-    student = models.ForeignKey(User, blank=False, null=False)
+    user = models.ForeignKey(User, blank=False, null=False)
     course = models.ForeignKey('Course', blank=False, null=False)
     mark = models.IntegerField(max_length=250, choices=MARKS)
+
+    def __unicode__(self):
+        return str(self.mark) + "__ " + self.course.url

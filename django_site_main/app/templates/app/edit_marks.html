@@ -1,0 +1,26 @@
+{% extends "app/layout.html" %}
+
+{% block content %}
+  <div class="list-group">
+
+    <script type="text/javascript">
+      updateHandler = function (id) {
+        var frm = $('#f_i_' + id);
+        frm.ajaxForm(function (data) {
+          out = $('#i_' + id);
+          out.html(data);
+          updateHandler(id);
+        })
+      }
+    </script>
+
+    {% for el in field_list %}
+      <div class="row list-group-item">
+        <div class="col-md-8">
+          {% include "app/edit_mark.html" with form=el.form i_id=el.i_id mode=el.mode name=el.name %}
+          <script>updateHandler({{ el.i_id }});</script>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}

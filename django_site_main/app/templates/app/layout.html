@@ -8,6 +8,10 @@
     <link rel="stylesheet" type="text/css" href="{% static 'app/content/bootstrap.min.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'app/content/site.css' %}" />
     <script src="{% static 'app/scripts/modernizr-2.6.2.js' %}"></script>
+  <script src="{% static 'app/scripts/jquery-1.10.2.js' %}"></script>
+  <script src="{% static 'app/scripts/bootstrap.js' %}"></script>
+  <script src="{% static 'app/scripts/respond.js' %}"></script>
+  <script src="http://malsup.github.com/jquery.form.js"></script>
 </head>
 
 <body>
@@ -24,6 +28,7 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a href="{% url 'app:home' %}">Home</a></li>
+                  <li><a href="{% url 'app:edit_marks' %}">Edytuj oceny</a></li>
                 </ul>
                 {% include 'app/loginpartial.html' %}
             </div>
@@ -38,10 +43,8 @@
         </footer>
     </div>
 
-    <script src="{% static 'app/scripts/jquery-1.10.2.js' %}"></script>
-    <script src="{% static 'app/scripts/bootstrap.js' %}"></script>
-    <script src="{% static 'app/scripts/respond.js' %}"></script>
 {% block scripts %}{% endblock %}
 
+    <script src="{% static 'app/scripts/WearProtection.js' %}"></script>
 </body>
 </html>

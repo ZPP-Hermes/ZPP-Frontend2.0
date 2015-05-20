@@ -6,7 +6,7 @@ from django import forms
 from django.forms import ChoiceField
 from django.utils.safestring import mark_safe
 
-from app.models import *
+from models import *
 from models import Course
 
 
@@ -34,6 +34,12 @@ class HorizontalRadioRenderer(forms.RadioSelect.renderer):
 
 MarkFormSet = formset_factory(MarkForm, extra=1)
 '''
+
+
+class SavedMarkForm(forms.ModelForm):
+    class Meta:
+        model = SavedMark
+        fields = ['mark']
 
 
 class GradeField(forms.ChoiceField):

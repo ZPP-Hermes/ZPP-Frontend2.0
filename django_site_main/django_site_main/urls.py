@@ -9,11 +9,11 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-                       url(r'^hermes/', include('app.urls', namespace='app')),
+                       url(r'^', include('app.urls', namespace='app')),
 
                        # url(r'^login/$',
                        # 'django.contrib.auth.views.login',
-                       #     {
+                       # {
                        #         'template_name': 'app/login.html',
                        #         'authentication_form': BootstrapAuthenticationForm,
                        #         'extra_context':

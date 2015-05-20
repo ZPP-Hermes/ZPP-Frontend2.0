@@ -37,18 +37,34 @@ def home(request):
     )
 
 
-'''def login(request):
+@login_required()
+def edit_marks(request):
+    courses = Course.objects.all()
+    lst = []
+    for course in courses:
+        i_id = course.pk
+        try:
+            instance = SavedMark.objects.get(course__pk=i_id, user=request.user)
+        except SavedMark.DoesNotExist:
+            lst.append({"name": course.name, "i_id": i_id, "form": SavedMarkForm(), "mode": False})
+            continue
+        lst.append({"name": course.name, "i_id": i_id, "form": SavedMarkForm(instance=instance), "mode": True})
+    return render(request, 'app/edit_marks.html', {"field_list": lst})
 
-    assert isinstance(request, HttpRequest)
-    return render(
-        request,
-        'app/login.html',
-        context_instance = RequestContext(request,
-        {
-            'title':'Logowanie',
-            'year':datetime.now().year,
-        })
-    )'''
+
+@login_required()
+def mark_edit(request, i_id):
+    # def mark_edit(request, i_id, mode):
+    mode = True
+    if request.method == 'POST':
+        (instance, created) = SavedMark.objects.get_or_create(course_id=i_id, user=request.user, defaults={"mark": 2})
+        form = SavedMarkForm(request.POST, instance=instance)
+        if form.is_valid():
+            form.save()
+            return render(request, 'app/edit_mark.html',
+                          {"name": instance.course.name, "success": True, "i_id": i_id, "form": form, "mode": True})
+        return render(request, 'app/edit_mark.html',
+                      {"name": instance.course.name, "i_id": i_id, "form": form, mode: "mode"})
 
 #proponowaczka przedmiotow obieralnych, wybieramy pzredmioty z listy
 #i zapuszczany algorytm regułowy z R-a
@@ -95,7 +111,6 @@ def grades(request):
                                             'GradesForm': GradesForm(),
                                         })
     )
-
 
 '''@login_required()
 def grades(request):
