@@ -1,8 +1,11 @@
 # w tej klasie bedziemy przechowywac skrypty R-owe dla aplikacji
+import os
+cwd = os.getcwd()
+
 class Rscript():
-    arules = '''dir2 <- "~/ZPP/ZPP-SSDT/nowyskrypt/ZPP_dane.csv"
-    dir <- paste(getwd(), "/ZPP_dane.csv", sep="")
-    data <- read.csv(dir2, sep=",")
+    arules = '''
+    dir = "ZPP_dane.csv"
+    data <- read.csv(dir, sep=",")
     trainingIdx = sample(1:nrow(data), round(3*(nrow(data)/5)))
     obow <- as.matrix(data[,1:30])
     obier <- as.matrix(data[,31:50])
@@ -60,7 +63,7 @@ class Rscript():
       return(recomSub)
     }'''
 
-    easiestWay='''recomEasySub <- function(student) {
+    easiestWay = '''recomEasySub <- function(student) {
       getSupport <- function(row) {length(subset(data, data[,row] != 0)[,row])}
       getMean <- function(row) {mean(subset(data, data[,row] != 0)[,row])}
       studCount <- dim(data)[1]

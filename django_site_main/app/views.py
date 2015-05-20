@@ -11,8 +11,6 @@ from django.shortcuts import render, redirect
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
 from datetime import datetime
-from django.core.urlresolvers import reverse
-from app.forms import GradesForm
 import urlparse
 import oauth2 as oauth
 import requests

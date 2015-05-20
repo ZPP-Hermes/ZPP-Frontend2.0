@@ -2,11 +2,11 @@
 Django settings for django_site_main project.
 """
 
-from os import path, environ 
+from os import path, environ
+
 PROJECT_ROOT = path.dirname(path.abspath(path.dirname(__file__)))
 
-
-if environ.get('PRODUCTION','0') == '1':
+if environ.get('PRODUCTION', '0') == '1':
     DEBUG = False
 else:
     DEBUG = True
@@ -23,8 +23,8 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-#'default': {
- #       'ENGINE': 'django.db.backends.sqlite3',
+# 'default': {
+#       'ENGINE': 'django.db.backends.sqlite3',
 #        'NAME': path.join(PROJECT_ROOT, 'db.sqlite3'),
 #       'USER': '',
 #       'PASSWORD': '',
@@ -34,8 +34,8 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'NAME': path.join(PROJECT_ROOT, 'testDB'),
-        'ENGINE': 'django.db.backends.sqlite3',#'sql_server.pyodbc',
+        'NAME': path.join(PROJECT_ROOT, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.sqlite3',  #'sql_server.pyodbc',
         'HOST': '',
         'USER': '',
         'PASSWORD': '',
@@ -101,7 +101,7 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+    #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
 # Make this unique, and don't share it with anybody.
@@ -111,7 +111,7 @@ SECRET_KEY = 'n(bd1f1c%e8=_xad02x5qtfn%wgwpi492e$8_erx+d)!tpeoim'
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
+    #     'django.template.loaders.eggs.Loader',
 )
 
 MIDDLEWARE_CLASSES = (

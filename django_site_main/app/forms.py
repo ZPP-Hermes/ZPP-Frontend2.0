@@ -3,17 +3,15 @@ Definition of forms.
 """
 
 from django import forms
-from django.forms import widgets, ChoiceField
+from django.forms import ChoiceField
 from django.utils.safestring import mark_safe
-from django.forms import ModelForm
-from django.forms.formsets import formset_factory
+
 from app.models import *
-from django.contrib.auth.forms import AuthenticationForm
-from django.utils.translation import ugettext_lazy as _
 from models import Course
 
+
 # class BootstrapAuthenticationForm(AuthenticationForm):
-#     """Authentication form which uses boostrap CSS."""
+# """Authentication form which uses boostrap CSS."""
 #     username = forms.CharField(max_length=254,
 #                                widget=forms.TextInput({
 #                                    'class': 'form-control',
@@ -25,7 +23,7 @@ from models import Course
 
 class HorizontalRadioRenderer(forms.RadioSelect.renderer):
     def render(self):
-            return mark_safe(u'\n'.join([u'%s &nbsp; &nbsp;' % w for w in self]))
+        return mark_safe(u'\n'.join([u'%s &nbsp; &nbsp;' % w for w in self]))
 
 
 '''class MarkForm(ModelForm):
@@ -36,14 +34,18 @@ class HorizontalRadioRenderer(forms.RadioSelect.renderer):
 
 MarkFormSet = formset_factory(MarkForm, extra=1)
 '''
-class GradeField(forms.ChoiceField):
 
-    marks = [(0,'brak'), (4,'2'), (6,'3'), (7,'3.5'), (8,'4'), (9,'4.5'), (10,'5'), (11,'5!')]
+
+class GradeField(forms.ChoiceField):
+    marks = [(0, 'brak'), (4, '2'), (6, '3'), (7, '3.5'), (8, '4'), (9, '4.5'), (10, '5'), (11, '5!')]
+
     def __init__(self, choices=marks, required=True,
                  widget=None, label=None, initial=None, help_text='', *args, **kwargs):
-        super(ChoiceField, self).__init__(required=required, widget=forms.RadioSelect(renderer=HorizontalRadioRenderer), label=label,
-                                        initial=0, help_text=help_text, *args, **kwargs)
+        super(ChoiceField, self).__init__(required=required, widget=forms.RadioSelect(renderer=HorizontalRadioRenderer),
+                                          label=label,
+                                          initial=0, help_text=help_text, *args, **kwargs)
         self.choices = choices
+
 
 class GradesForm(forms.Form):
     def __init__(self, *args, **kwargs):
