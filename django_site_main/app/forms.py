@@ -10,6 +10,7 @@ from django.forms.formsets import formset_factory
 from app.models import *
 from django.contrib.auth.forms import AuthenticationForm
 from django.utils.translation import ugettext_lazy as _
+from models import Course
 
 # class BootstrapAuthenticationForm(AuthenticationForm):
 #     """Authentication form which uses boostrap CSS."""
@@ -27,14 +28,14 @@ class HorizontalRadioRenderer(forms.RadioSelect.renderer):
             return mark_safe(u'\n'.join([u'%s &nbsp; &nbsp;' % w for w in self]))
 
 
-class MarkForm(ModelForm):
+'''class MarkForm(ModelForm):
     class Meta:
         model=Mark
         fields=['mark', 'course']
 
 
 MarkFormSet = formset_factory(MarkForm, extra=1)
-"""
+'''
 class GradeField(forms.ChoiceField):
 
     marks = [(0,'brak'), (4,'2'), (6,'3'), (7,'3.5'), (8,'4'), (9,'4.5'), (10,'5'), (11,'5!')]
@@ -45,6 +46,14 @@ class GradeField(forms.ChoiceField):
         self.choices = choices
 
 class GradesForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        super(GradesForm, self).__init__(*args, **kwargs)
+        subjects = Course.objects.all()[0:50]
+        i = 0
+        for s in subjects:
+            self.fields['subject' + str(i)] = GradeField(label=s.name)
+            i += 1
+
     def as_p(self):
         return self._html_output(
             normal_row='<p%(html_class_attr)s>%(label)s &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %(field)s%(help_text)s</p><hr>',
@@ -54,7 +63,7 @@ class GradesForm(forms.Form):
             errors_on_separate_row=True)
 
 
-    przedmiot_ob_1 = GradeField(label='Przedmiot obowiazkowy 1')
+    '''przedmiot_ob_1 = GradeField(label='Przedmiot obowiazkowy 1')
     przedmiot_ob_2 = GradeField(label='Przedmiot obowiazkowy 2')
     przedmiot_ob_3 = GradeField(label='Przedmiot obowiazkowy 3')
     przedmiot_ob_4 = GradeField(label='Przedmiot obowiazkowy 4')
@@ -83,6 +92,4 @@ class GradesForm(forms.Form):
     przedmiot_ob_27 = GradeField(label='Przedmiot obowiazkowy 27')
     przedmiot_ob_28 = GradeField(label='Przedmiot obowiazkowy 28')
     przedmiot_ob_29 = GradeField(label='Przedmiot obowiazkowy 29')
-    przedmiot_ob_30 = GradeField(label='Przedmiot obowiazkowy 30')
-
-    """
+    przedmiot_ob_30 = GradeField(label='Przedmiot obowiazkowy 30')'''

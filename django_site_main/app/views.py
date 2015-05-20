@@ -8,35 +8,21 @@ import urlparse
 from django.contrib.auth.decorators import login_required
 from django.forms import inlineformset_factory
 from django.shortcuts import render, redirect
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
+from datetime import datetime
+from django.core.urlresolvers import reverse
+from app.forms import GradesForm
+import urlparse
 import oauth2 as oauth
 import requests
-import pyRserve
 import numpy as np
 
 from forms import *
 from models import *
-import Rscripts
+import Predictions
 
 consumer = oauth.Consumer(key='uvTtX63RWFaCf9pAxdtT', secret='5Jn3t9KNVMvSCeBtREX3nCvcKAnL55UrJKbcTvxD')
-# przygotowywanie skryptow R-owych
-conn = pyRserve.connect()
-conn.r(Rscripts.Rscript.arules)
-# tu będziemy chcieli wczytywać dane z bazy
-#conn.r.data = prepData()
-
-#funkcja bioraca dane z bazy i przerabiajaca na macierz do R, ja jeszcze trzeba przerobic
-def prepData():
-    dataPr = Mark.objects.all()
-    dataPr = dataPr.values_list()
-    colNum = len(dataPr[1])
-    dataList = []
-    for i in range(colNum):
-        dataList += [id[i] for id in dataPr]
-    dataR = np.array(dataList)
-    dataR.shape = (colNum, len(dataList) / colNum)
-    return dataR
 
 
 def home(request):
@@ -69,29 +55,33 @@ def home(request):
 #proponowaczka przedmiotow obieralnych, wybieramy pzredmioty z listy
 #i zapuszczany algorytm regułowy z R-a
 
+
+#proponowaczka przedmiotow obieralnych, wybieramy pzredmioty z listy
+#i zapuszczany algorytm regułowy z R-a
+
 #zakomentowalem bo obecny kod sie wywala na tej formatce
 #a do tego widok ten zapisuje oceny do bazy danych
 #skrypt analizujacy powinien pobierac oceny od aktualnie zalogowanego uzytkownika
-'''@login_required()
+#@login_required()
 def grades(request):
     assert isinstance(request, HttpRequest)
 
     if request.method == 'POST':
         form = GradesForm(request.POST)
         if form.is_valid():
-            values = form.cleaned_data.values()
+            values = []
+            for i in range(50):
+                values.append(form.cleaned_data['subject' + str(i)])
             marks = []
             for v in values:
                 marks += [int(v)]
-            conn.r.gotMarks = marks
-            gotSub = conn.r('which(gotMarks>0)')
-            recommendSubjects = conn.r('getRecomSub(which(gotMarks>0),0.5)')
+            recommendSubjects = Predictions.getRecomSubStrategy2(marks)
             return render(
                 request,
                 'app/gradesResult.html',
                 context_instance=RequestContext(request,
                                                 {
-                                                    'gotSub': gotSub,
+                                                    'gotSub': [],
                                                     'recomSub': recommendSubjects,
                                                 })
             )
@@ -104,12 +94,12 @@ def grades(request):
                                             'title': 'Oceny',
                                             'message': 'Wprowadz dane',
                                             'year': datetime.now().year,
-                                            'gradesForm': GradesForm(),
+                                            'GradesForm': GradesForm(),
                                         })
-    )'''
+    )
 
 
-@login_required()
+'''@login_required()
 def grades(request):
     success = False
     assert isinstance(request, HttpRequest)
@@ -140,7 +130,7 @@ def grades(request):
                                             'formset': formset,
                                             'success': success
                                         })
-    )
+    )'''
 
 
 def oauth_init(request):

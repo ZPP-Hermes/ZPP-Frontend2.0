@@ -2,7 +2,7 @@
 class Rscript():
     arules = '''dir2 <- "~/ZPP/ZPP-SSDT/nowyskrypt/ZPP_dane.csv"
     dir <- paste(getwd(), "/ZPP_dane.csv", sep="")
-    data <- read.csv(dir, sep=",")
+    data <- read.csv(dir2, sep=",")
     trainingIdx = sample(1:nrow(data), round(3*(nrow(data)/5)))
     obow <- as.matrix(data[,1:30])
     obier <- as.matrix(data[,31:50])
@@ -24,21 +24,13 @@ class Rscript():
     koszykObier <- as(l, "transactions")
 
     #szukanie regul dla przedmiotow obieralnych, postaci jesli ktos co wzial to prawdopodobnie wzial rowniez to
-    bestObier = sort(itemFrequency(koszykObier)[which(itemFrequency(koszykObier) >= sort(itemFrequency(koszykObier), decreasing = T)[5])], decreasing = TRUE)
+    #bestObier = sort(itemFrequency(koszykObier)[which(itemFrequency(koszykObier) >= sort(itemFrequency(koszykObier), decreasing = T)[5])], decreasing = TRUE)
 
-    ruleObier = apriori(koszykObier, parameter = list(supp = 0.0002, conf = 0.8, minlen = 2,
-                        target = "rules", originalSupport = FALSE), appearance = NULL, control = list(sort = -1))
+    ruleObier = apriori(koszykObier, parameter = list(supp = 0.0002, conf = 0.75, minlen = 2,
+    target = "rules", originalSupport = FALSE), appearance = NULL, control = list(sort = -1))
 
     ruleObier = sort(ruleObier, decreasing = T, by = "lift")
-    rules = subset(ruleObier, lhs %in% paste(2))
 
-    #mozemy sobie zobaczyc nasze reguly
-
-    inspect(ruleObier[1:10])
-
-    #mozemy zobaczyc co nasze reguly zaproponuja jakiemus studentowi z danych regul
-    student <- which(obier[1,]>0)
-    pr <- 1/8
 
     #funkcja zwracajaca wektor proponowanych przedmiotow dla danego studenta
     #pobiera wektor wybranych przedmiotow obieralnych oraz procent przedmiotow branych pod uwage
@@ -52,13 +44,32 @@ class Rscript():
       {
         rules = subset(rules, lhs %in% paste(student[i]))
       }
-      subMatr <- as(rhs(rules), "matrix")
-      m <- dim(subMatr)[1]
-      recomSub <- vector()
-      for (i in 1:m)
-      {
-        recomSub <- c(recomSub, which(subMatr[i,]>0))
+      if (length(rules) > 0) {
+        subMatr <- as(rhs(rules), "matrix")
+        m <- dim(subMatr)[1]
+        recomSub <- vector()
+        for (i in 1:m)
+        {
+          recomSub <- c(recomSub, which(subMatr[i,]>0))
+        }
+        recomSub <- sort(unique(recomSub))
       }
-      recomSub <- unique(recomSub)
+      else {
+        recomSub = c()
+      }
       return(recomSub)
+    }'''
+
+    easiestWay='''recomEasySub <- function(student) {
+      getSupport <- function(row) {length(subset(data, data[,row] != 0)[,row])}
+      getMean <- function(row) {mean(subset(data, data[,row] != 0)[,row])}
+      studCount <- dim(data)[1]
+      supp <- unlist(lapply(31:50,getSupport))/studCount
+      mean <- (unlist(lapply(31:50,getMean))-4)/7
+      easyRate <- 1/3*supp + 2/3*mean
+      A <- matrix(c(easyRate,1:20),20,2)
+      A <- A[order(A[,1], decreasing=TRUE),]
+      studNotChosen <- which(student == 0)
+      recom <- A[A[,2] %in% studNotChosen,2]
+      return(recom)
     }'''

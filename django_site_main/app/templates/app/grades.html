@@ -11,7 +11,7 @@
 <form action="{% url 'app:grades' %}" method="POST">
     {% csrf_token %}
      <table>
-      {{ formset }}
+      {{ GradesForm }}
     </table>
     <input type="submit" value="Wyślij" />
 </form>
