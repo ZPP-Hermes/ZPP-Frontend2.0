@@ -2,7 +2,7 @@
 class Rscript():
     arules = '''dir2 <- "~/ZPP/ZPP-SSDT/nowyskrypt/ZPP_dane.csv"
     dir <- paste(getwd(), "/ZPP_dane.csv", sep="")
-    data <- read.csv(dir2, sep=",")
+    data <- data.matrix(read.csv(dir2, sep=","))
     trainingIdx = sample(1:nrow(data), round(3*(nrow(data)/5)))
     obow <- as.matrix(data[,1:30])
     obier <- as.matrix(data[,31:50])
@@ -71,5 +71,40 @@ class Rscript():
       A <- A[order(A[,1], decreasing=TRUE),]
       studNotChosen <- which(student == 0)
       recom <- A[A[,2] %in% studNotChosen,2]
+      return(recom)
+    }'''
+    knn='''dist <- function(v,w) {
+      sum <- 0
+      for (i in 1:length(v)) {
+        if (xor((v[i] == 0),w[i] == 0)) {
+          sum <- sum + 10
+        }
+        else {
+          sum <- sum + abs(v[i] - w[i])
+        }
+      }
+      return(sum)
+    }
+
+    recomNearestSub <- function(k, student) {
+      n <- dim(data)[1]
+      A <- matrix(0,n,2)
+      for (i in 1:n) {
+        A[i,1] <- dist(student,data[i,])
+        A[i,2] <- i
+      }
+      bestNb <- A[order(A[,1])[1:k],2]
+      studNotChosen <- which(student == 0)
+      recom <- c()
+      for (i in 1:length(bestNb)) {
+        nbSub <- which(data[bestNb[i],31:50] > 0)
+        recom <- unique(c(recom, nbSub[nbSub %in% studNotChosen]))
+      }
+      return(recom)
+    }'''
+    random='''random <- function(student) {
+      studNotChosen <- which(student == 0)
+      n <- length(studNotChosen)
+      recom <- sample(studNotChosen,prob=rep(1,n))[1:(n/2)]
       return(recom)
     }'''

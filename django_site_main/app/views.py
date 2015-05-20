@@ -75,13 +75,19 @@ def grades(request):
             marks = []
             for v in values:
                 marks += [int(v)]
-            recommendSubjects = Predictions.getRecomSubStrategy2(marks)
+            selectedAlg = int(form.cleaned_data['algorithm'])
+            if (selectedAlg == 1):
+                recommendSubjects = Predictions.getRecomSubStrategy1(marks)
+            elif (selectedAlg == 2):
+                recommendSubjects = Predictions.getRecomSubStrategy2(marks)
+            elif (selectedAlg == 3):
+                recommendSubjects = Predictions.getRecomSubStrategy3(marks)
             return render(
                 request,
                 'app/gradesResult.html',
                 context_instance=RequestContext(request,
                                                 {
-                                                    'gotSub': [],
+                                                    'gotSub': selectedAlg,
                                                     'recomSub': recommendSubjects,
                                                 })
             )

@@ -4,6 +4,8 @@ import Rscripts
 conn = pyRserve.connect()
 conn.r(Rscripts.Rscript.arules)
 conn.r(Rscripts.Rscript.easiestWay)
+#conn.r(Rscripts.Rscript.knn)
+conn.r(Rscripts.Rscript.random)
 #tu bedziemy chcieli wczytywac dane z bazy
 #conn.r.data = prepData()
 
@@ -23,12 +25,18 @@ def prepData():
 def getRecomSubStrategy1(marks):
     conn.r.gotMarks = marks[30:50]
     recommendSubjects = conn.r('getRecomSub(which(gotMarks>0),0.5)')
-    recom = [x+30 for x in recommendSubjects]
+    recom = [int(x+30) for x in recommendSubjects]
     return recom
 
 def getRecomSubStrategy2(marks):
     conn.r.gotMarks = marks[30:50]
     recommendSubjects = conn.r('recomEasySub(gotMarks)')
+    recom = [int(x+30) for x in recommendSubjects]
+    return recom
+
+def getRecomSubStrategy3(marks):
+    conn.r.gotMarks = marks[30:50]
+    recommendSubjects = conn.r('random(gotMarks)')
     recom = [int(x+30) for x in recommendSubjects]
     return recom
 
