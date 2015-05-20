@@ -1,3 +1,12 @@
+wstawianie poczatkowych danych do bazy:
+1. ```python manage.py loaddata datas.json```
+2. jeśli się wywala:
+   ```
+   rm ../db.sqlite3
+   python manage.py syncdb
+   python manage.py loaddata datas.json
+   ```
+
 uruchamianie apliakacji:
 1. w app/Rscripts.py w 3 linii nalezy podac sciezke do pliku z danymi testowymi (w fazie robienia jest skrypt bioracy dane z bazy)
 
