@@ -1,7 +1,10 @@
 uruchamianie apliakacji:
 1. w app/Rscripts.py w 3 linii nalezy podac sciezke do pliku z danymi testowymi (w fazie robienia jest skrypt bioracy dane z bazy)
+
 2. w R install.packages('arules') (jesli niezainstalowana)
+
 3. uruchamiamy Rserve uruchamiajac skrypt ./start.R (jesli nie dziala wykonywanie skryptow z l.k. sciagnac apt-get install littler)
+
 4. uruchamiamy aplikacje
 
 uruchamianie pyRserve:
@@ -17,11 +20,6 @@ uruchamianie pyRserve:
 
 6. sprawdzamy czy działa: conn = pyRserve.connect()
 
-Aby uruchomić aplikacje:
-
-1. instalujemy biblioteke arules, w R install.packages('arules')
-
-2. w Rscripts dopisujemy w pierwszej linii na zmienną dir2 sciezke do pliku z danymi
 
 ustawianie pythona:
 
