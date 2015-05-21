@@ -5,6 +5,7 @@
 *.pyc
 *.pyproj
 
+.env/*
 django_site_main/static/*
 web.debug.config
 *.sqlite3
