@@ -7,7 +7,6 @@ from django.forms import ChoiceField
 from django.utils.safestring import mark_safe
 
 from models import *
-from models import Course
 
 
 # class BootstrapAuthenticationForm(AuthenticationForm):
@@ -29,7 +28,12 @@ class HorizontalRadioRenderer(forms.RadioSelect.renderer):
 '''class MarkForm(ModelForm):
     class Meta:
         model=Mark
-        fields=['mark', 'course']
+        fields=['course', 'mark']
+        widgets = {
+            'course': TextInput(attrs={'class': 'course-input',}),
+            'mark': Select(attrs={'class': 'mark-select',})
+
+        }
 
 
 MarkFormSet = formset_factory(MarkForm, extra=1)

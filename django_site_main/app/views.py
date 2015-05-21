@@ -15,6 +15,7 @@ import urlparse
 import oauth2 as oauth
 import requests
 import numpy as np
+import json
 
 from forms import *
 from models import *
@@ -119,6 +120,7 @@ def grades(request):
     student = request.user
     if request.method == 'POST':
         formset = MarkFormSet(request.POST, request.FILES)
+        parseFormSet(formset)
         if formset.is_valid():
             for form in formset.forms:
                 tmpform = form.save(commit=False)
@@ -127,11 +129,12 @@ def grades(request):
                     tmpform.save()
             success=True
     else:
-        courses = list(Course.objects.all())
-        def in_f(item) :
-            return {"course": item}
-        _initial = map(in_f, courses)
-        formset = MarkFormSet(initial=_initial)
+        # courses = list(Course.objects.all())
+        # def in_f(item) :
+        #     return {"course": item}
+        # _initial = map(in_f, courses)
+        # formset = MarkFormSet(initial=_initial)
+        formset = MarkFormSet()
     return render(
         request,
         'app/grades.html',
@@ -144,6 +147,18 @@ def grades(request):
                                             'success': success
                                         })
     )'''
+
+@login_required()
+def gradesFilter(request):
+    success = False
+    assert isinstance(request, HttpRequest)
+    query = request.GET.get('query')
+    if query is None:
+        return HttpResponse('')
+
+    courses = [course.name for course in Course.objects.filter(name__icontains=query)]
+
+    return HttpResponse(','.join(courses))
 
 
 def oauth_init(request):
