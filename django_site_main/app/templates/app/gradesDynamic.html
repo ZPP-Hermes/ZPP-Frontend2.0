@@ -1,0 +1,120 @@
+{% extends "app/layout.html" %}
+{% load static %}
+
+{% block content %}
+  {% if success %}
+  <h1>Wpisano do bazy</h1>
+  {% endif %}
+
+<style type="text/css">
+    #add-form {
+        width:35px; height:35px;
+        background:url({% static 'app/media/img-add.jpeg' %});
+        margin-top: 15pxl; margin-bottom: 15px;
+        cursor: pointer;
+    }
+
+    #grades-form p {
+        position: relative;
+        width: 370px;
+        margin-top: 20px;
+    }
+
+    .course-input {
+        width: 300px !important;
+    }
+
+
+    .course-input, .mark-select {
+        position: absolute;
+        right: 0px;
+    }
+
+
+
+    .ui-state-focus {
+        background: none !important;
+        font-weight: normal !important;
+        color: grey !important;
+    }
+    .ui-state-focus a,
+    .ui-state-focus a:hover,
+    .ui-state-focus a:link,
+    .ui-state-focus a:visited {
+        color: #c77405;
+        text-decoration: none;
+    }
+    .ui-state-focus .ui-icon {
+        background-image: url("images/ui-icons_ef8c08_256x240.png");
+    }
+
+
+
+    .ui-menu-item {
+        font-size: 14px !important;
+    }
+    .ui-menu-icons .ui-menu-item {
+        padding-left: 2em;
+    }
+
+    ul.errorlist li {
+        color: red !important;
+    }
+
+</style>
+
+ <script type="text/javascript">
+    $(document).ready(function(){
+        function registerAutocomplete() {
+            $(".course-input").autocomplete({
+                source: function (request, response) {
+                    jQuery.get("filter", {
+                        query: request.term
+                    }, function (data) {
+                        response(data.split(","));
+                    });
+                },
+                minLength: 2
+            });
+        }
+        registerAutocomplete()
+
+      clean_sel_copy = $($(".mark-select")[0].parentElement).clone()[0]
+      clean_inp_copy = $($(".course-input")[0].parentElement).clone()[0]
+
+      $("#add-form").click(function(){
+        inputs_list = $(".course-input")
+        last_input = inputs_list[inputs_list.length - 1]
+        last_index = parseInt(last_input.id.match(/\d+/)[0])
+        new_index = last_index + 1
+
+        $("<hr>").insertBefore("#add-form")
+
+        new_input = $($(clean_inp_copy).clone()[0])
+        id = new_input.find("input")[0].id.replace(/\d+/, new_index)
+        new_input.find("input")[0].id = id
+        new_input.insertBefore("#add-form")
+
+        new_select = $($(clean_sel_copy).clone()[0])
+        id = new_select.find("select")[0].id.replace(/\d+/, new_index)
+        new_select.find("select")[0].id = id
+        new_select.insertBefore("#add-form")
+
+        registerAutocomplete()
+      });
+    });
+  </script>
+
+<h2>{{ title }}.</h2>
+<h3 style="margin-bottom: 20px;">{{ message }}</h3>
+
+<form id="grades-form" action="{% url 'app:grades' %}" method="POST">
+    {% csrf_token %}
+
+      {{ formset.as_p }}
+
+    <div id="add-form"></div>
+    <input type="submit" value="Wyślij" />
+</form>
+
+{% endblock %}

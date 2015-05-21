@@ -3,7 +3,7 @@ Definition of forms.
 """
 
 from django import forms
-from django.forms import ChoiceField
+from django.forms import ChoiceField, ModelForm, TextInput, Select, formset_factory
 from django.utils.safestring import mark_safe
 
 from models import *
@@ -25,7 +25,7 @@ class HorizontalRadioRenderer(forms.RadioSelect.renderer):
         return mark_safe(u'\n'.join([u'%s &nbsp; &nbsp;' % w for w in self]))
 
 
-'''class MarkForm(ModelForm):
+class MarkForm(ModelForm):
     class Meta:
         model=Mark
         fields=['course', 'mark']
@@ -37,7 +37,6 @@ class HorizontalRadioRenderer(forms.RadioSelect.renderer):
 
 
 MarkFormSet = formset_factory(MarkForm, extra=1)
-'''
 
 
 class SavedMarkForm(forms.ModelForm):
