@@ -4,9 +4,9 @@ import os
 import Rscripts
 
 
-conn = pyRserve.connect()
-conn.r(Rscripts.Rscript.arules)
-conn.r(Rscripts.Rscript.easiestWay)
+#conn = pyRserve.connect()
+#conn.r(Rscripts.Rscript.arules)
+#conn.r(Rscripts.Rscript.easiestWay)
 # tu bedziemy chcieli wczytywac dane z bazy
 #conn.r.data = prepData()
 
