@@ -82,6 +82,8 @@ def grades(request):
                 recommendSubjects = Predictions.getRecomSubStrategy2(marks)
             elif (selectedAlg == 3):
                 recommendSubjects = Predictions.getRecomSubStrategy3(marks)
+            elif (selectedAlg == 4):
+                recommendSubjects = Predictions.getRecomSubStrategy4(marks)
             return render(
                 request,
                 'app/gradesResult.html',

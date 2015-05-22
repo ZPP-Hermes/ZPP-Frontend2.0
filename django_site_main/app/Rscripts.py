@@ -1,8 +1,7 @@
 # w tej klasie bedziemy przechowywac skrypty R-owe dla aplikacji
 class Rscript():
-    arules = '''dir2 <- "~/ZPP/ZPP-SSDT/nowyskrypt/ZPP_dane.csv"
-    dir <- paste(getwd(), "/ZPP_dane.csv", sep="")
-    data <- data.matrix(read.csv(dir2, sep=","))
+    arules = '''#data <- data.matrix(read.csv(dir2, sep=","))
+    #data <- matrix(sample(c(0,4,6,7,8,9,10,11),10000*51,prob=c(2,rep(1,7)),replace=TRUE),10000,51)
     trainingIdx = sample(1:nrow(data), round(3*(nrow(data)/5)))
     obow <- as.matrix(data[,1:30])
     obier <- as.matrix(data[,31:50])
@@ -26,7 +25,7 @@ class Rscript():
     #szukanie regul dla przedmiotow obieralnych, postaci jesli ktos co wzial to prawdopodobnie wzial rowniez to
     #bestObier = sort(itemFrequency(koszykObier)[which(itemFrequency(koszykObier) >= sort(itemFrequency(koszykObier), decreasing = T)[5])], decreasing = TRUE)
 
-    ruleObier = apriori(koszykObier, parameter = list(supp = 0.0002, conf = 0.75, minlen = 2,
+    ruleObier = apriori(koszykObier, parameter = list(supp = 0.0005, conf = 0.9, minlen = 2,
     target = "rules", originalSupport = FALSE), appearance = NULL, control = list(sort = -1))
 
     ruleObier = sort(ruleObier, decreasing = T, by = "lift")
@@ -89,6 +88,7 @@ class Rscript():
     recomNearestSub <- function(k, student) {
       n <- dim(data)[1]
       A <- matrix(0,n,2)
+      student <- unlist(student)
       for (i in 1:n) {
         A[i,1] <- dist(student,data[i,])
         A[i,2] <- i
@@ -108,3 +108,15 @@ class Rscript():
       recom <- sample(studNotChosen,prob=rep(1,n))[1:(n/2)]
       return(recom)
     }'''
+    dataGen='''data1 <- data.matrix(data1)
+    data1 <- data1[,2:4]
+    data2=data1[data1[,2]<51,1:3]
+    data3=data1[data1[,2]>50,1:2]
+    matrix1= matrix(rep(0,51*nrow(data3)),ncol=51,byrow=TRUE)
+    for(i in 1:nrow(data2)){
+        matrix1[data2[i,1],data2[i,2]] = data2[i,3]
+    }
+    for(i in 1:nrow(data3)){
+        matrix1[as.integer(data3[i,1]),51] = as.integer(data3[i,2])-51
+    }
+    data <- data.matrix(matrix1)'''

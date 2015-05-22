@@ -48,7 +48,7 @@ class GradeField(forms.ChoiceField):
 class GradesForm(forms.Form):
     def __init__(self, *args, **kwargs):
         algs = [(1,'strategia wykorzystujaca algorytm regulowy'),(2,'lista priorytetowa najlatwiejszych przedmiotow'),
-                  (3,'dobierz w sposob losowy')]
+                  (3,'dobierz w sposob losowy'),(4,'strategia najblizszych sasiadow')]
         super(GradesForm, self).__init__(*args, **kwargs)
         subjects = Course.objects.all()[0:50]
         i = 0
