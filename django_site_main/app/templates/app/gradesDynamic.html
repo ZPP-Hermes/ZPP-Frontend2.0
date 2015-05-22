@@ -16,9 +16,14 @@
 
     #grades-form p {
         position: relative;
-        width: 240px;
+        width: 370px;
         margin-top: 20px;
     }
+
+    .course-input {
+        width: 300px !important;
+    }
+
 
     .course-input, .mark-select {
         position: absolute;
@@ -60,17 +65,19 @@
 
  <script type="text/javascript">
     $(document).ready(function(){
-        $(".course-input").autocomplete({
-            source: function (request, response) {
-                jQuery.get("filter", {
-                    query: request.term
-                }, function (data) {
-                    response(data.split(","));
-                });
-            },
-            minLength: 2
-        });
-
+        function registerAutocomplete() {
+            $(".course-input").autocomplete({
+                source: function (request, response) {
+                    jQuery.get("filter", {
+                        query: request.term
+                    }, function (data) {
+                        response(data.split(","));
+                    });
+                },
+                minLength: 2
+            });
+        }
+        registerAutocomplete()
 
       clean_sel_copy = $($(".mark-select")[0].parentElement).clone()[0]
       clean_inp_copy = $($(".course-input")[0].parentElement).clone()[0]
@@ -84,12 +91,16 @@
         $("<hr>").insertBefore("#add-form")
 
         new_input = $($(clean_inp_copy).clone()[0])
-        new_input.find("input")[0].id.replace(/\d+/, new_index)
+        id = new_input.find("input")[0].id.replace(/\d+/, new_index)
+        new_input.find("input")[0].id = id
         new_input.insertBefore("#add-form")
 
         new_select = $($(clean_sel_copy).clone()[0])
-        new_select.find("select")[0].id.replace(/\d+/, new_index)
+        id = new_select.find("select")[0].id.replace(/\d+/, new_index)
+        new_select.find("select")[0].id = id
         new_select.insertBefore("#add-form")
+
+        registerAutocomplete()
       });
     });
   </script>
@@ -99,13 +110,10 @@
 
 <form id="grades-form" action="{% url 'app:grades' %}" method="POST">
     {% csrf_token %}
-     <table>
-      {{ GradesForm }}
-    </table>
 
-      <!--{{ formset.as_p }}-->
+      {{ formset.as_p }}
 
-    <!--<div id="add-form"></div>-->
+    <div id="add-form"></div>
     <input type="submit" value="Wyślij" />
 </form>
 

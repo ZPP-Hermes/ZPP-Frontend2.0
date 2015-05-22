@@ -15,6 +15,7 @@ import urlparse
 import oauth2 as oauth
 import requests
 import numpy as np
+import json
 
 from forms import *
 from models import *
@@ -112,29 +113,37 @@ def grades(request):
                                         })
     )
 
-'''@login_required()
-def grades(request):
+def parseFormSet(formset):
+    for form in formset.forms:
+        formName = form.prefix + '-' + 'course'
+        courseName = form.data[formName]
+        try:
+            course = Course.objects.get(name=courseName)
+            form.data._mutable = True
+            form.data[formName] = course.id
+            form.data._mutable = False
+        except Exception, e:
+            print e
+            pass
+
+@login_required()
+def gradesDynamic(request):
     success = False
     assert isinstance(request, HttpRequest)
     student = request.user
     if request.method == 'POST':
         formset = MarkFormSet(request.POST, request.FILES)
+        parseFormSet(formset)
         if formset.is_valid():
             for form in formset.forms:
-                tmpform = form.save(commit=False)
-                tmpform.student = student
-                if tmpform.course:
-                    tmpform.save()
+                #TODO
+                pass
             success=True
     else:
-        courses = list(Course.objects.all())
-        def in_f(item) :
-            return {"course": item}
-        _initial = map(in_f, courses)
-        formset = MarkFormSet(initial=_initial)
+        formset = MarkFormSet()
     return render(
         request,
-        'app/grades.html',
+        'app/gradesDynamic.html',
         context_instance=RequestContext(request,
                                         {
                                             'title': 'Oceny',
@@ -143,7 +152,19 @@ def grades(request):
                                             'formset': formset,
                                             'success': success
                                         })
-    )'''
+    )
+
+@login_required()
+def gradesFilter(request):
+    success = False
+    assert isinstance(request, HttpRequest)
+    query = request.GET.get('query')
+    if query is None:
+        return HttpResponse('')
+
+    courses = [course.name for course in Course.objects.filter(name__icontains=query)]
+
+    return HttpResponse(','.join(courses))
 
 
 def oauth_init(request):
