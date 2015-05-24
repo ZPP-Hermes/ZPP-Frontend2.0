@@ -36,25 +36,31 @@ class Rscript():
 
     getRecomSub <- function(student, pr) {
       Idx = sample(1:length(student), round(pr*length(student)))
-      student <- student[Idx]
+      student <- unlist(student[Idx])
       n <- length(student)
       rules <- ruleObier
-      for (i in 1:n)
+      if (n > 0)
       {
-        rules = subset(rules, lhs %in% paste(student[i]))
-      }
-      if (length(rules) > 0) {
-        subMatr <- as(rhs(rules), "matrix")
-        m <- dim(subMatr)[1]
-        recomSub <- vector()
-        for (i in 1:m)
-        {
-          recomSub <- c(recomSub, which(subMatr[i,]>0))
-        }
-        recomSub <- sort(unique(recomSub))
+          for (i in 1:n)
+          {
+            rules = subset(rules, lhs %in% paste(student[i]))
+          }
+          if (length(rules) > 0) {
+            subMatr <- as(rhs(rules), "matrix")
+            m <- dim(subMatr)[1]
+            recomSub <- vector()
+            for (i in 1:m)
+            {
+              recomSub <- c(recomSub, which(subMatr[i,]>0))
+            }
+            recomSub <- sort(unique(recomSub))
+          }
+          else {
+            recomSub = c()
+          }
       }
       else {
-        recomSub = c()
+          recomSub = c()
       }
       return(as.list(recomSub))
     }'''
