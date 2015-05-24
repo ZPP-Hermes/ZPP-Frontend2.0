@@ -1,12 +1,55 @@
 {% extends "app/layout.html" %}
 
 {% block content %}
-<h1> wybrane algorytmy</h1>
-<h2> {{selAlg}}</h2>
-<h1> Lista proponowanych przedmiotow </h1>
-<h2>{{ recomSub1 }}</h2>
-<h2>{{ recomSub2 }}</h2>
-<h2>{{ recomSub3 }}</h2>
-<h2>{{ recomSub4 }}</h2>
+
+
+{% if alg.0 %}
+<h2> Algorytm regulowy </h2>
+<h3> Lista proponowanych przedmiotow: </h3>
+<ol>
+{% for name,url in recomSub1 %}
+<li>
+    <h4> {{ name }} <h4>
+    <h5> <a href="https://usosweb.mimuw.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod={{ url }}"> Strona przedmiotu </a> </h5>
+</li>
+{% endfor %}
+</ol>
+{% endif %}
+{% if alg.1 %}
+<h2> Najlatwiejsze przedmioty </h2>
+<h3> Lista proponowanych przedmiotow: </h3>
+<ol>
+{% for name,url in recomSub2 %}
+<li>
+    <h4> {{ name }} <h4>
+    <h5> <a href="https://usosweb.mimuw.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod={{ url }}"> Strona przedmiotu </a> </h5>
+</li>
+{% endfor %}
+</ol>
+{% endif %}
+{% if alg.2 %}
+<h2> Szczesliwy traf </h2>
+<h3> Lista proponowanych przedmiotow: </h3>
+<ol>
+{% for name,url in recomSub3 %}
+<li>
+    <h4> {{ name }} <h4>
+    <h5> <a href="https://usosweb.mimuw.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod={{ url }}"> Strona przedmiotu </a> </h5>
+</li>
+{% endfor %}
+</ol>
+{% endif %}
+{% if alg.3 %}
+<h2> Strategia najblizszych sasiadow </h2>
+<h3> Lista proponowanych przedmiotow: </h3>
+<ol>
+{% for name,url in recomSub4 %}
+<li>
+    <h4> {{ name }} <h4>
+    <h5> <a href="https://usosweb.mimuw.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod={{ url }}"> Strona przedmiotu </a> </h5>
+</li>
+{% endfor %}
+</ol>
+{% endif %}
 
 {% endblock %}

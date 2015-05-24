@@ -2,6 +2,7 @@
 """
 Definition of views.
 """
+
 from datetime import datetime
 import urlparse
 
@@ -52,6 +53,7 @@ def home(request):
         })
     )'''
 
+
 #proponowaczka przedmiotow obieralnych, wybieramy pzredmioty z listy
 #i zapuszczany algorytm regułowy z R-a
 
@@ -63,6 +65,9 @@ def home(request):
 #a do tego widok ten zapisuje oceny do bazy danych
 #skrypt analizujacy powinien pobierac oceny od aktualnie zalogowanego uzytkownika
 #@login_required()
+
+#troche ifowo elsowy ale na razie nie wiem jak lepiej zrobic wybor
+#konkretnych algorytmow (zeby wyswietlac uzytkownikowi tylko wybrane)
 def grades(request):
     assert isinstance(request, HttpRequest)
 
@@ -78,24 +83,58 @@ def grades(request):
             recommendSubjects2 = []
             recommendSubjects3 = []
             recommendSubjects4 = []
+            recSubNames1 = []
+            recSubNames2 = []
+            recSubNames3 = []
+            recSubNames4 = []
+            algorytmy = []
             if (1 in selectedAlg):
+                algorytmy.append(1)
                 recommendSubjects1 = Predictions.getRecomSubStrategy1(marks)
+                for i in range(0,len(recommendSubjects1)):
+                    id_course = recommendSubjects1[i]
+                    course = Course.objects.get(pk=id_course)
+                    recSubNames1.append((course.name,course.url))
+            else:
+                algorytmy.append(None)
             if (2 in selectedAlg):
+                algorytmy.append(2)
                 recommendSubjects2 = Predictions.getRecomSubStrategy2(marks)
+                for i in range(0,len(recommendSubjects2)):
+                    id_course = recommendSubjects2[i]
+                    course = Course.objects.get(pk=id_course)
+                    link = course.url
+                    recSubNames2.append((course.name,course.url))
+            else:
+                algorytmy.append(None)
             if (3 in selectedAlg):
+                algorytmy.append(3)
                 recommendSubjects3 = Predictions.getRecomSubStrategy3(marks)
+                for i in range(0,len(recommendSubjects3)):
+                    id_course = recommendSubjects3[i]
+                    course = Course.objects.get(pk=id_course)
+                    recSubNames3.append((course.name,course.url))
+            else:
+                algorytmy.append(None)
             if (4 in selectedAlg):
+                algorytmy.append(4)
                 recommendSubjects4 = Predictions.getRecomSubStrategy4(marks)
+                for i in range(0,len(recommendSubjects4)):
+                    id_course = recommendSubjects4[i]
+                    course = Course.objects.get(pk=id_course)
+                    recSubNames4.append((course.name,course.url))
+            else:
+                algorytmy.append(None)
             return render(
                 request,
                 'app/gradesResult.html',
                 context_instance=RequestContext(request,
                                                 {
-                                                    'selAlg': selectedAlg,
-                                                    'recomSub1': recommendSubjects1,
-                                                    'recomSub2': recommendSubjects2,
-                                                    'recomSub3': recommendSubjects3,
-                                                    'recomSub4': recommendSubjects4,
+                                                    'alg': algorytmy,
+                                                    'recomSub1': recSubNames1,
+                                                    'recomSub2': recSubNames2,
+                                                    'recomSub3': recSubNames3,
+                                                    'recomSub4': recSubNames4,
                                                 })
             )
 
