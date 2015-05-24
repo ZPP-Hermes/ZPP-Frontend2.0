@@ -126,3 +126,25 @@ class Rscript():
         matrix1[as.integer(data3[i,1]),51] = as.integer(data3[i,2])-51
     }
     data <- data.matrix(matrix1)'''
+    semKnn = '''mode <- function(x) {
+      ux <- unique(x)
+      ux[which.max(tabulate(match(x, ux)))]
+    }
+
+    recomNearestSem <- function(k, student) {
+      student <- unlist(student)
+      n <- dim(data)[1]
+      A <- matrix(0,n,2)
+      for (i in 1:n) {
+        A[i,1] <- dist(student,data[i,])
+        A[i,2] <- i
+      }
+      bestNb <- A[order(A[,1])[1:k],2]
+      bestSem <- data[bestNb,51]
+      return(mode(bestSem))
+    }'''
+    semRf = '''library(randomForest)
+    classifierf<-randomForest(data[,1:50], data[,51])
+    predictRf <- function(student) {
+      return(round(predict(classifierf, student)))
+    }'''

@@ -23,6 +23,8 @@ conn.r(Rscripts.Rscript.arules)
 conn.r(Rscripts.Rscript.easiestWay)
 conn.r(Rscripts.Rscript.knn)
 conn.r(Rscripts.Rscript.random)
+conn.r(Rscripts.Rscript.semKnn)
+conn.r(Rscripts.Rscript.semRf)
 #tu bedziemy chcieli wczytywac dane z bazy
 #conn.r.data = prepData()
 
@@ -52,4 +54,14 @@ def getRecomSubStrategy4(marks):
     recommendSubjects = conn.r('recomNearestSub(5,gotMarks)')
     recom = map(lambda x:int(x)+30, recommendSubjects)
     return recom
+
+def getRecomSemStrategy1(marks):
+    conn.r.gotMarks = marks
+    recomSem = conn.r('predictRf(gotMarks)')
+    return int(recomSem)
+
+def getRecomSemStrategy2(marks):
+    conn.r.gotMarks = marks
+    recomSem = conn.r('recomNearestSem(8,gotMarks)')
+    return int(recomSem)
 

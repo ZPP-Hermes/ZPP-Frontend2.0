@@ -78,11 +78,14 @@ def grades(request):
             for i in range(50):
                 values.append(form.cleaned_data['subject' + str(i)])
             marks = map(int, values)
-            selectedAlg = map(int, form.cleaned_data['algorithm'])
+            selectedAlg = map(int, form.cleaned_data['algorithmSub'])
+            selectedAlgSem = map(int, form.cleaned_data['algorithmSem'])
             recommendSubjects1 = []
             recommendSubjects2 = []
             recommendSubjects3 = []
             recommendSubjects4 = []
+            recommendSem1 = []
+            recommendSem2 = []
             recSubNames1 = []
             recSubNames2 = []
             recSubNames3 = []
@@ -125,6 +128,10 @@ def grades(request):
                     recSubNames4.append((course.name,course.url))
             else:
                 algorytmy.append(None)
+            if (1 in selectedAlgSem):
+                recommendSem1 = Predictions.getRecomSemStrategy1(marks)
+            if (2 in selectedAlgSem):
+                recommendSem2 = Predictions.getRecomSemStrategy2(marks)
             return render(
                 request,
                 'app/gradesResult.html',
@@ -135,6 +142,8 @@ def grades(request):
                                                     'recomSub2': recSubNames2,
                                                     'recomSub3': recSubNames3,
                                                     'recomSub4': recSubNames4,
+                                                    'recomSem1': recommendSem1,
+                                                    'recomSem2': recommendSem2,
                                                 })
             )
 
