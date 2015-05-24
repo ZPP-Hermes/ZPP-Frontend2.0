@@ -32,24 +32,24 @@ conn.r(Rscripts.Rscript.random)
 def getRecomSubStrategy1(marks):
     conn.r.gotMarks = marks[30:50]
     recommendSubjects = conn.r('getRecomSub(which(gotMarks>0),0.5)')
-    recom = [int(x+30) for x in recommendSubjects]
+    recom = map(lambda x:int(x)+30, recommendSubjects)
     return recom
 
 def getRecomSubStrategy2(marks):
     conn.r.gotMarks = marks[30:50]
     recommendSubjects = conn.r('recomEasySub(gotMarks)')
-    recom = [int(x+30) for x in recommendSubjects]
+    recom = map(lambda x:int(x)+30, recommendSubjects)
     return recom
 
 def getRecomSubStrategy3(marks):
     conn.r.gotMarks = marks[30:50]
     recommendSubjects = conn.r('random(gotMarks)')
-    recom = [int(x+30) for x in recommendSubjects]
+    recom = map(lambda x:int(x)+30, recommendSubjects)
     return recom
 
 def getRecomSubStrategy4(marks):
     conn.r.gotMarks = marks[30:50]
     recommendSubjects = conn.r('recomNearestSub(5,gotMarks)')
-    recom = [int(x+30) for x in recommendSubjects]
+    recom = map(lambda x:int(x)+30, recommendSubjects)
     return recom
 

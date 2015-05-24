@@ -56,7 +56,7 @@ class Rscript():
       else {
         recomSub = c()
       }
-      return(recomSub)
+      return(as.list(recomSub))
     }'''
 
     easiestWay='''recomEasySub <- function(student) {

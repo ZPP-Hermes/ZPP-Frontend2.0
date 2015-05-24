@@ -55,8 +55,8 @@ class GradesForm(forms.Form):
         for s in subjects:
             self.fields['subject' + str(i)] = GradeField(label=s.name)
             i += 1
-        self.fields['algorithm'] = forms.ChoiceField(required=False,
-        widget=forms.Select, choices=algs,label="Wybierz algorytm")
+        self.fields['algorithm'] = forms.MultipleChoiceField(required=False,
+        widget=forms.CheckboxSelectMultiple, choices=algs,label="Wybierz algorytm")
 
     def as_p(self):
         return self._html_output(

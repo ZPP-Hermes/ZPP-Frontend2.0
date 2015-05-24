@@ -72,25 +72,30 @@ def grades(request):
             values = []
             for i in range(50):
                 values.append(form.cleaned_data['subject' + str(i)])
-            marks = []
-            for v in values:
-                marks += [int(v)]
-            selectedAlg = int(form.cleaned_data['algorithm'])
-            if (selectedAlg == 1):
-                recommendSubjects = Predictions.getRecomSubStrategy1(marks)
-            elif (selectedAlg == 2):
-                recommendSubjects = Predictions.getRecomSubStrategy2(marks)
-            elif (selectedAlg == 3):
-                recommendSubjects = Predictions.getRecomSubStrategy3(marks)
-            elif (selectedAlg == 4):
-                recommendSubjects = Predictions.getRecomSubStrategy4(marks)
+            marks = map(int, values)
+            selectedAlg = map(int, form.cleaned_data['algorithm'])
+            recommendSubjects1 = []
+            recommendSubjects2 = []
+            recommendSubjects3 = []
+            recommendSubjects4 = []
+            if (1 in selectedAlg):
+                recommendSubjects1 = Predictions.getRecomSubStrategy1(marks)
+            if (2 in selectedAlg):
+                recommendSubjects2 = Predictions.getRecomSubStrategy2(marks)
+            if (3 in selectedAlg):
+                recommendSubjects3 = Predictions.getRecomSubStrategy3(marks)
+            if (4 in selectedAlg):
+                recommendSubjects4 = Predictions.getRecomSubStrategy4(marks)
             return render(
                 request,
                 'app/gradesResult.html',
                 context_instance=RequestContext(request,
                                                 {
-                                                    'gotSub': selectedAlg,
-                                                    'recomSub': recommendSubjects,
+                                                    'selAlg': selectedAlg,
+                                                    'recomSub1': recommendSubjects1,
+                                                    'recomSub2': recommendSubjects2,
+                                                    'recomSub3': recommendSubjects3,
+                                                    'recomSub4': recommendSubjects4,
                                                 })
             )
 
