@@ -5,7 +5,8 @@ from app import views
 urlpatterns = patterns('',
 
                        url(r'^$', views.home, name='home'),
-                       url('^', include('django.contrib.auth.urls')),
+                       url(r'^', include('django.contrib.auth.urls')),
+                       url(r'^register', views.register, name='register'),
                        url(r'^edit_marks/', views.edit_marks, name='edit_marks'),
                        url(r'^commit_edit/(\d+)', views.mark_edit, name='commit_edit'),
                        url(r'^grades/$', views.grades, name='grades'),

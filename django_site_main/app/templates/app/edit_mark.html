@@ -3,7 +3,10 @@
 
   <form id="f_i_{{ i_id }}" action="{% url 'app:commit_edit' i_id %}" method="post" class="form-horizontal">
     {% csrf_token %}
-    {{ form }}
+    {{ form.errors }}
+    {% for radio in form.mark %}
+      {{ radio }}&nbsp
+    {% endfor %}
     <input type="submit" value="Zatwierdź" class="btn btn-default"/>
   </form>
 

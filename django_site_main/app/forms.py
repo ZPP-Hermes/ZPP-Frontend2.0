@@ -3,7 +3,7 @@ Definition of forms.
 """
 
 from django import forms
-from django.forms import ChoiceField, ModelForm, TextInput, Select, formset_factory
+from django.forms import ChoiceField, ModelForm, TextInput, Select, formset_factory, RadioSelect
 from django.utils.safestring import mark_safe
 
 from models import *
@@ -11,7 +11,7 @@ from models import *
 
 # class BootstrapAuthenticationForm(AuthenticationForm):
 # """Authentication form which uses boostrap CSS."""
-#     username = forms.CharField(max_length=254,
+# username = forms.CharField(max_length=254,
 #                                widget=forms.TextInput({
 #                                    'class': 'form-control',
 #                                    'placeholder': 'User name'}))
@@ -27,11 +27,11 @@ class HorizontalRadioRenderer(forms.RadioSelect.renderer):
 
 class MarkForm(ModelForm):
     class Meta:
-        model=Mark
-        fields=['course', 'mark']
+        model = Mark
+        fields = ['course', 'mark']
         widgets = {
-            'course': TextInput(attrs={'class': 'course-input',}),
-            'mark': Select(attrs={'class': 'mark-select',})
+            'course': TextInput(attrs={'class': 'course-input', }),
+            'mark': Select(attrs={'class': 'mark-select', })
 
         }
 
@@ -43,6 +43,9 @@ class SavedMarkForm(forms.ModelForm):
     class Meta:
         model = SavedMark
         fields = ['mark']
+        widgets = {
+            'mark': RadioSelect()
+        }
 
 
 class GradeField(forms.ChoiceField):

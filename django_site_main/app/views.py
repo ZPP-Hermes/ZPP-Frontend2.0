@@ -6,6 +6,7 @@ from datetime import datetime
 import urlparse
 
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
 from django.forms import inlineformset_factory
 from django.shortcuts import render, redirect
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
@@ -22,6 +23,18 @@ from models import *
 import Predictions
 
 consumer = oauth.Consumer(key='uvTtX63RWFaCf9pAxdtT', secret='5Jn3t9KNVMvSCeBtREX3nCvcKAnL55UrJKbcTvxD')
+
+
+def register(request):
+    if request.user.is_authenticated():
+        return redirect('app:home')
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+    else:
+        form = UserCreationForm()
+    return render(request, 'app/register.html', {'form': form})
 
 
 def home(request):
