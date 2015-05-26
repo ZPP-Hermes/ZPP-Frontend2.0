@@ -80,17 +80,23 @@ def grades(request):
             marks = map(int, values)
             selectedAlg = map(int, form.cleaned_data['algorithmSub'])
             selectedAlgSem = map(int, form.cleaned_data['algorithmSem'])
+            #listy na rezultaty zapytan predykcji przedmiotow wg poszczegolnych
+            #algorytmow
             recommendSubjects1 = []
             recommendSubjects2 = []
             recommendSubjects3 = []
             recommendSubjects4 = []
-            recommendSem1 = []
-            recommendSem2 = []
+            #lista przekazujaca do szablonu rekomendacje seminariow (jesli jakies byly)
+            recommendSem = []
+            #lista na pary nazwa-url wybranych przedmiotow
             recSubNames1 = []
             recSubNames2 = []
             recSubNames3 = []
             recSubNames4 = []
+            #wybrane algorytmy predykcji przedmiotow - info dla szablonu
             algorytmy = []
+            #czy student chce predykcji seminariow - info dla szablonu
+            czyPredSem = not (not selectedAlgSem)
             if (1 in selectedAlg):
                 algorytmy.append(1)
                 recommendSubjects1 = Predictions.getRecomSubStrategy1(marks)
@@ -129,9 +135,17 @@ def grades(request):
             else:
                 algorytmy.append(None)
             if (1 in selectedAlgSem):
-                recommendSem1 = Predictions.getRecomSemStrategy1(marks)
+                recommendation = Predictions.getRecomSemStrategy1(marks) + 51
+                seminar = Course.objects.get(pk=recommendation)
+                recommendSem.append((seminar.name,seminar.url))
+            else:
+                recommendSem.append(None)              
             if (2 in selectedAlgSem):
-                recommendSem2 = Predictions.getRecomSemStrategy2(marks)
+                recommendation = Predictions.getRecomSemStrategy2(marks) + 51
+                seminar = Course.objects.get(pk=recommendation)
+                recommendSem.append((seminar.name,seminar.url))
+            else:
+                recommendSem.append(None)
             return render(
                 request,
                 'app/gradesResult.html',
@@ -142,8 +156,8 @@ def grades(request):
                                                     'recomSub2': recSubNames2,
                                                     'recomSub3': recSubNames3,
                                                     'recomSub4': recSubNames4,
-                                                    'recomSem1': recommendSem1,
-                                                    'recomSem2': recommendSem2,
+                                                    'sem'      : czyPredSem,
+                                                    'recomSem' : recommendSem,
                                                 })
             )
 

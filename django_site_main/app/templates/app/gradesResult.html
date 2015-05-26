@@ -51,8 +51,26 @@
 {% endfor %}
 </ol>
 {% endif %}
+
+{% if sem %}
 <h2> Proponowane seminaria</h2>
-<h3>{{ recomSem1 }}</h3>
-<h3>{{ recomSem2 }}</h3>
+
+{% if recomSem.0 %}
+<h3>Seminarium rekomendowane wg algorytmu lasów losowych </h3>
+<ul>
+<h4>{{ recomSem.0.0 }}</h4>
+<h5> <a href="https://usosweb.mimuw.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod={{ recomSem.0.1  }}"> Strona przedmiotu </a> </h5>
+</ul>
+{% endif %}
+
+{% if recomSem.1 %}
+<h3>Seminarium rekomendowane wg strategii najbliższych sąsiadów </h3>
+<ul>
+<h4>{{ recomSem.1.0 }}</h4>
+<h5> <a href="https://usosweb.mimuw.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod={{ recomSem.1.1 }}"> Strona przedmiotu </a> </h5>
+</ul>
+{% endif %}
+
+{% endif %}
 
 {% endblock %}
