@@ -61,12 +61,19 @@ class GradeField(forms.ChoiceField):
 
 class GradesForm(forms.Form):
     def __init__(self, *args, **kwargs):
+        algsSub = [(1,'strategia wykorzystujaca algorytm regulowy'),(2,'lista priorytetowa najlatwiejszych przedmiotow'),
+                  (3,'dobierz w sposob losowy'),(4,'strategia najblizszych sasiadow')]
+        algsSem = [(1,'strategia wykorzystujaca algorytm lasow losowych'),(2,'strategia najblizszych sasiadow')]
         super(GradesForm, self).__init__(*args, **kwargs)
         subjects = Course.objects.all()[0:50]
         i = 0
         for s in subjects:
             self.fields['subject' + str(i)] = GradeField(label=s.name)
             i += 1
+        self.fields['algorithmSub'] = forms.MultipleChoiceField(required=False,
+        widget=forms.CheckboxSelectMultiple, choices=algsSub,label="Wybierz algorytm predykcji przedmiotow")
+        self.fields['algorithmSem'] = forms.MultipleChoiceField(required=False,
+        widget=forms.CheckboxSelectMultiple, choices=algsSem,label="Wybierz algorytm predykcji seminariow")
 
     def as_p(self):
         return self._html_output(
@@ -76,34 +83,3 @@ class GradesForm(forms.Form):
             help_text_html=' <span class="helptext">%s</span>',
             errors_on_separate_row=True)
 
-
-    '''przedmiot_ob_1 = GradeField(label='Przedmiot obowiazkowy 1')
-    przedmiot_ob_2 = GradeField(label='Przedmiot obowiazkowy 2')
-    przedmiot_ob_3 = GradeField(label='Przedmiot obowiazkowy 3')
-    przedmiot_ob_4 = GradeField(label='Przedmiot obowiazkowy 4')
-    przedmiot_ob_5 = GradeField(label='Przedmiot obowiazkowy 5')
-    przedmiot_ob_6 = GradeField(label='Przedmiot obowiazkowy 6')
-    przedmiot_ob_7 = GradeField(label='Przedmiot obowiazkowy 7')
-    przedmiot_ob_8 = GradeField(label='Przedmiot obowiazkowy 8')
-    przedmiot_ob_9 = GradeField(label='Przedmiot obowiazkowy 9')
-    przedmiot_ob_10 = GradeField(label='Przedmiot obowiazkowy 10')
-    przedmiot_ob_11 = GradeField(label='Przedmiot obowiazkowy 11')
-    przedmiot_ob_12 = GradeField(label='Przedmiot obowiazkowy 12')
-    przedmiot_ob_13 = GradeField(label='Przedmiot obowiazkowy 13')
-    przedmiot_ob_14 = GradeField(label='Przedmiot obowiazkowy 14')
-    przedmiot_ob_15 = GradeField(label='Przedmiot obowiazkowy 15')
-    przedmiot_ob_16 = GradeField(label='Przedmiot obowiazkowy 16')
-    przedmiot_ob_17 = GradeField(label='Przedmiot obowiazkowy 17')
-    przedmiot_ob_18 = GradeField(label='Przedmiot obowiazkowy 18')
-    przedmiot_ob_19 = GradeField(label='Przedmiot obowiazkowy 19')
-    przedmiot_ob_20 = GradeField(label='Przedmiot obowiazkowy 20')
-    przedmiot_ob_21 = GradeField(label='Przedmiot obowiazkowy 21')
-    przedmiot_ob_22 = GradeField(label='Przedmiot obowiazkowy 22')
-    przedmiot_ob_23 = GradeField(label='Przedmiot obowiazkowy 23')
-    przedmiot_ob_24 = GradeField(label='Przedmiot obowiazkowy 24')
-    przedmiot_ob_25 = GradeField(label='Przedmiot obowiazkowy 25')
-    przedmiot_ob_26 = GradeField(label='Przedmiot obowiazkowy 26')
-    przedmiot_ob_27 = GradeField(label='Przedmiot obowiazkowy 27')
-    przedmiot_ob_28 = GradeField(label='Przedmiot obowiazkowy 28')
-    przedmiot_ob_29 = GradeField(label='Przedmiot obowiazkowy 29')
-    przedmiot_ob_30 = GradeField(label='Przedmiot obowiazkowy 30')'''
