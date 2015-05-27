@@ -54,6 +54,8 @@ class Rscript():
               recomSub <- c(recomSub, which(subMatr[i,]>0))
             }
             recomSub <- sort(unique(recomSub))
+            studNotChosen <- which(student == 0)
+            recomSub <- recomSub[recomSub %in% studNotChosen]
           }
           else {
             recomSub = c()
