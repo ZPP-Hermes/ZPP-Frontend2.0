@@ -123,7 +123,7 @@ class Rscript():
         matrix1[data2[i,1],data2[i,2]] = data2[i,3]
     }
     for(i in 1:nrow(data3)){
-        matrix1[as.integer(data3[i,1]),51] = as.integer(data3[i,2])-51
+        matrix1[as.integer(data3[i,1]),51] = as.integer(data3[i,2])-50
     }
     data <- data.matrix(matrix1)'''
     semKnn = '''mode <- function(x) {
