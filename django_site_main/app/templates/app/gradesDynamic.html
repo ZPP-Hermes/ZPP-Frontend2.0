@@ -29,7 +29,9 @@
         position: absolute;
         right: 0px;
     }
-
+    .mark-select {
+        display: none;
+    }
 
 
     .ui-state-focus {
@@ -50,6 +52,10 @@
 
 
 
+    #tile-template {
+        position: absolute;
+        right: 0px;
+    }
     .ui-menu-item {
         font-size: 14px !important;
     }
@@ -61,11 +67,32 @@
         color: red !important;
     }
 
+
+
+    .tile {
+        background: white;
+        margin-left: 5px;
+        margin-right: 5px;
+        width: 27px;
+        height: 27px;
+        display: inline-block !important;
+        border:2px solid #248F24;
+        cursor: pointer;
+        text-align: center;
+        padding: 0px;
+        padding-top: 3px;
+        font-size: 85%;
+    }
+    .tile:hover {
+        background: #AAE2AA;
+        <!--border:2px solid black;-->
+    }
+
 </style>
 
  <script type="text/javascript">
     $(document).ready(function(){
-        function registerAutocomplete() {
+        function registerFunctions() {
             $(".course-input").autocomplete({
                 source: function (request, response) {
                     jQuery.get("filter", {
@@ -76,39 +103,65 @@
                 },
                 minLength: 2
             });
+
+            $(".tile").click(function() {
+                $(this.parentNode.childNodes).css("background", "")
+                $(this).css("background", "#AAE2AA")
+
+                selected_mark = parseInt(this.className.match(/\d+/)[0])
+                mark_form = $(this.parentNode.parentNode).find(".mark-select")[0]
+                $(mark_form).val(selected_mark)
+            });
         }
-        registerAutocomplete()
 
-      clean_sel_copy = $($(".mark-select")[0].parentElement).clone()[0]
-      clean_inp_copy = $($(".course-input")[0].parentElement).clone()[0]
+        clean_tile_copy = $($("#tile-template")[0]).clone()[0]
+        $(clean_tile_copy).css("display", "inline-block")
+        $($(".mark-select")[0].parentElement)[0].appendChild($(clean_tile_copy).clone()[0])
 
-      $("#add-form").click(function(){
-        inputs_list = $(".course-input")
-        last_input = inputs_list[inputs_list.length - 1]
-        last_index = parseInt(last_input.id.match(/\d+/)[0])
-        new_index = last_index + 1
+        registerFunctions()
 
-        $("<hr>").insertBefore("#add-form")
+        clean_sel_copy = $($(".mark-select")[0].parentElement).clone()[0]
+        clean_inp_copy = $($(".course-input")[0].parentElement).clone()[0]
 
-        new_input = $($(clean_inp_copy).clone()[0])
-        id = new_input.find("input")[0].id.replace(/\d+/, new_index)
-        new_input.find("input")[0].id = id
-        new_input.insertBefore("#add-form")
 
-        new_select = $($(clean_sel_copy).clone()[0])
-        id = new_select.find("select")[0].id.replace(/\d+/, new_index)
-        new_select.find("select")[0].id = id
-        new_select.insertBefore("#add-form")
+        $("#add-form").click(function(){
+            inputs_list = $(".course-input")
+            last_input = inputs_list[inputs_list.length - 1]
+            last_index = parseInt(last_input.id.match(/\d+/)[0])
+            new_index = last_index + 1
 
-        registerAutocomplete()
-      });
+            $("<hr>").insertBefore("#add-form")
+            $("<hr>").insertBefore("#add-form")
+
+            new_input = $($(clean_inp_copy).clone()[0])
+            id = new_input.find("input")[0].id.replace(/\d+/, new_index)
+            new_input.find("input")[0].id = id
+            new_input.insertBefore("#add-form")
+
+            new_select = $($(clean_sel_copy).clone()[0])
+            id = new_select.find("select")[0].id.replace(/\d+/, new_index)
+            new_select.find("select")[0].id = id
+            new_select.insertBefore("#add-form")
+
+            registerFunctions()
+        });
     });
   </script>
 
 <h2>{{ title }}.</h2>
 <h3 style="margin-bottom: 20px;">{{ message }}</h3>
 
-<form id="grades-form" action="{% url 'app:grades' %}" method="POST">
+<div id="tile-template" style="display: none;">
+    <div class="tile tile-4">2</div>
+    <div class="tile tile-6">3</div>
+    <div class="tile tile-7">3+</div>
+    <div class="tile tile-8">4</div>
+    <div class="tile tile-9">4+</div>
+    <div class="tile tile-10">5</div>
+    <div class="tile tile-11">5!</div>
+</div>
+
+<form id="grades-form" action="{% url 'app:gradesDynamic' %}" method="POST">
     {% csrf_token %}
 
       {{ formset.as_p }}
