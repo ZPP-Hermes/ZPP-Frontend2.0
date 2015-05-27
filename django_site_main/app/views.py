@@ -146,6 +146,14 @@ def gradesDynamic(request):
     student = request.user
     if request.method == 'POST':
         formset = MarkFormSet(request.POST, request.FILES)
+        formset_validate = MarkFormSet(request.POST, request.FILES)
+
+        parseFormSet(formset_validate)
+        if formset_validate.is_valid():
+            #TODO
+            return HttpResponse("OK!")
+        else:
+
         parseFormSet(formset)
         if formset.is_valid():
             for form in formset.forms:
