@@ -1,75 +1,107 @@
-{% extends "app/layout.html" %}
-{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    {% load staticfiles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'app/content/bootstrap.min.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'app/content/site.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'app/scripts/jquery-ui-1.11.4/jquery-ui.min.css' %}"/>
+    <script src="{% static 'app/scripts/modernizr-2.6.2.js' %}"></script>
+    <!--<script src="{% static 'app/scripts/jquery-1.10.2.js' %}"></script>-->
+    <!--<script src="{% static 'app/scripts/bootstrap.js' %}"></script>-->
+    <!--<script src="{% static 'app/scripts/respond.js' %}"></script>-->
+    <!--<script src="http://malsup.github.com/jquery.form.js"></script>-->
+    <script src="{% static 'app/scripts/jquery-2.1.4.min.js' %}"></script>
+    <script src="{% static 'app/scripts/jquery-ui-1.11.4/jquery-ui.min.js' %}"></script>
+</head>
 
-{% block content %}
-  {% if success %}
-  <h1>Wpisano do bazy</h1>
-  {% endif %}
+<body>
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="{% url 'app:home' %}" class="navbar-brand">ZPP Hermes</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="{% url 'app:home' %}">Home</a></li>
+                <li><a href="{% url 'app:edit_marks' %}">Edytuj oceny</a></li>
+            </ul>
+            {% include 'app/loginpartial.html' %}
+        </div>
+    </div>
+</div>
 
-<style type="text/css">
-    #add-form {
+<div class="container body-content">
+
+    <style type="text/css">
+        #add-form {
         width:35px; height:35px;
         background:url({% static 'app/media/img-add.jpeg' %});
         margin-top: 15pxl; margin-bottom: 15px;
         cursor: pointer;
-    }
+        }
 
-    #grades-form p {
+        #grades-form p {
         position: relative;
         width: 370px;
         margin-top: 20px;
-    }
+        }
 
-    .course-display {
+        .course-display {
         width: 300px !important;
-    }
+        }
 
 
-    .course-display, .mark-select {
+        .course-display, .mark-select {
         position: absolute;
         right: 0px;
-    }
-    .mark-select {
+        }
+        .mark-select {
         display: none;
-    }
+        }
 
 
-    .ui-state-focus {
+        .ui-state-focus {
         background: none !important;
         font-weight: normal !important;
         color: grey !important;
-    }
-    .ui-state-focus a,
-    .ui-state-focus a:hover,
-    .ui-state-focus a:link,
-    .ui-state-focus a:visited {
+        }
+        .ui-state-focus a,
+        .ui-state-focus a:hover,
+        .ui-state-focus a:link,
+        .ui-state-focus a:visited {
         color: #c77405;
         text-decoration: none;
-    }
-    .ui-state-focus .ui-icon {
+        }
+        .ui-state-focus .ui-icon {
         background-image: url("images/ui-icons_ef8c08_256x240.png");
-    }
+        }
 
 
-
-    #tile-template {
+        #tile-template {
         position: absolute;
         right: 0px;
-    }
-    .ui-menu-item {
+        }
+        .ui-menu-item {
         font-size: 14px !important;
-    }
-    .ui-menu-icons .ui-menu-item {
+        }
+        .ui-menu-icons .ui-menu-item {
         padding-left: 2em;
-    }
+        }
 
-    ul.errorlist li {
+        ul.errorlist li {
         color: red !important;
-    }
+        }
 
 
-
-    .tile {
+        .tile {
         background: white;
         margin-left: 5px;
         margin-right: 5px;
@@ -82,15 +114,15 @@
         padding: 0px;
         padding-top: 3px;
         font-size: 85%;
-    }
-    .tile:hover {
+        }
+        .tile:hover {
         background: #AAE2AA;
         <!--border:2px solid black;-->
-    }
+        }
 
-</style>
+    </style>
 
- <script type="text/javascript">
+    <script type="text/javascript">
     var form_count = 1
 
     $(document).ready(function(){
@@ -166,28 +198,41 @@
             registerFunctions()
         });
     });
-  </script>
 
-<h2>{{ title }}.</h2>
-<h3 style="margin-bottom: 20px;">{{ message }}</h3>
 
-<div id="tile-template" style="display: none;">
-    <div class="tile tile-4">2</div>
-    <div class="tile tile-6">3</div>
-    <div class="tile tile-7">3+</div>
-    <div class="tile tile-8">4</div>
-    <div class="tile tile-9">4+</div>
-    <div class="tile tile-10">5</div>
-    <div class="tile tile-11">5!</div>
+    </script>
+
+    <h2>{{ title }}.</h2>
+
+    <h3 style="margin-bottom: 20px;">{{ message }}</h3>
+
+    <div id="tile-template" style="display: none;">
+        <div class="tile tile-4">2</div>
+        <div class="tile tile-6">3</div>
+        <div class="tile tile-7">3+</div>
+        <div class="tile tile-8">4</div>
+        <div class="tile tile-9">4+</div>
+        <div class="tile tile-10">5</div>
+        <div class="tile tile-11">5!</div>
+    </div>
+
+    <form id="grades-form" action="{% url 'app:gradesDynamic' %}" method="POST">
+        {% csrf_token %}
+
+        {{ formset.as_p }}
+
+        <div id="add-form"></div>
+        <input type="submit" value="Wyślij"/>
+    </form>
+
+    <hr/>
+    <footer>
+        <p>&copy; {{ year }} - ZPP</p>
+    </footer>
 </div>
 
-<form id="grades-form" action="{% url 'app:gradesDynamic' %}" method="POST">
-    {% csrf_token %}
+{% block scripts %}{% endblock %}
 
-      {{ formset.as_p }}
-
-    <div id="add-form"></div>
-    <input type="submit" value="Wyślij" />
-</form>
-
-{% endblock %}
+<script src="{% static 'app/scripts/WearProtection.js' %}"></script>
+</body>
+</html>

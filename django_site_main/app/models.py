@@ -4,14 +4,14 @@ from django.db import models
 
 class Student(models.Model):
     usos_id = models.CharField(max_length=250)
-#    models.OneToOneField('User', primary_key=True)
-#    courses=models.ManyToManyField(Course, through="Mark")
+    # models.OneToOneField('User', primary_key=True)
+    #    courses=models.ManyToManyField(Course, through="Mark")
     def __unicode__(self):
         return self.usos_id
 
 
 # models.OneToOneField('User', primary_key=True)
-#    courses=models.ManyToManyField(Course, through="Mark")
+# courses=models.ManyToManyField(Course, through="Mark")
 
 class Course(models.Model):
     TYPES = (
@@ -32,6 +32,7 @@ class Course(models.Model):
 
     def __unicode__(self):
         return self.name
+
 
 class Mark(models.Model):
     MARKS = (

@@ -2,63 +2,61 @@
 {% load static %}
 
 {% block content %}
-  {% if success %}
-  <h1>Wpisano do bazy</h1>
-  {% endif %}
+{% if success %}
+<h1>Wpisano do bazy</h1>
+{% endif %}
 
 <style type="text/css">
     #add-form {
-        width:35px; height:35px;
-        background:url({% static 'app/media/img-add.jpeg' %});
-        margin-top: 15pxl; margin-bottom: 15px;
-        cursor: pointer;
+    width:35px; height:35px;
+    background:url({% static 'app/media/img-add.jpeg' %});
+    margin-top: 15pxl; margin-bottom: 15px;
+    cursor: pointer;
     }
 
     #grades-form p {
-        position: relative;
-        width: 240px;
-        margin-top: 20px;
+    position: relative;
+    width: 240px;
+    margin-top: 20px;
     }
 
     .course-input, .mark-select {
-        position: absolute;
-        right: 0px;
+    position: absolute;
+    right: 0px;
     }
 
 
-
     .ui-state-focus {
-        background: none !important;
-        font-weight: normal !important;
-        color: grey !important;
+    background: none !important;
+    font-weight: normal !important;
+    color: grey !important;
     }
     .ui-state-focus a,
     .ui-state-focus a:hover,
     .ui-state-focus a:link,
     .ui-state-focus a:visited {
-        color: #c77405;
-        text-decoration: none;
+    color: #c77405;
+    text-decoration: none;
     }
     .ui-state-focus .ui-icon {
-        background-image: url("images/ui-icons_ef8c08_256x240.png");
+    background-image: url("images/ui-icons_ef8c08_256x240.png");
     }
-
 
 
     .ui-menu-item {
-        font-size: 14px !important;
+    font-size: 14px !important;
     }
     .ui-menu-icons .ui-menu-item {
-        padding-left: 2em;
+    padding-left: 2em;
     }
 
     ul.errorlist li {
-        color: red !important;
+    color: red !important;
     }
 
 </style>
 
- <script type="text/javascript">
+<script type="text/javascript">
     $(document).ready(function(){
         $(".course-input").autocomplete({
             source: function (request, response) {
@@ -92,21 +90,22 @@
         new_select.insertBefore("#add-form")
       });
     });
-  </script>
+
+</script>
 
 <h2>{{ title }}.</h2>
 <h3 style="margin-bottom: 20px;">{{ message }}</h3>
 
 <form id="grades-form" action="{% url 'app:grades' %}" method="POST">
     {% csrf_token %}
-     <table>
-      {{ GradesForm }}
+    <table>
+        {{ GradesForm }}
     </table>
 
-      <!--{{ formset.as_p }}-->
+    <!--{{ formset.as_p }}-->
 
     <!--<div id="add-form"></div>-->
-    <input type="submit" value="Wyślij" />
+    <input type="submit" value="Wyślij"/>
 </form>
 
 {% endblock %}

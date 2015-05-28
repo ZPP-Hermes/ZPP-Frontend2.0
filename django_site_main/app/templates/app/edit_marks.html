@@ -1,8 +1,8 @@
 {% extends "app/layout.html" %}
 
 {% block content %}
-  <script src="http://malsup.github.com/jquery.form.js"></script>
-  <div class="list-group">
+<script src="http://malsup.github.com/jquery.form.js"></script>
+<div class="list-group">
 
     <script type="text/javascript">
       updateHandler = function (id) {
@@ -13,15 +13,16 @@
           updateHandler(id);
         })
       }
+
     </script>
 
     {% for el in field_list %}
-      <div class="row list-group-item">
+    <div class="row list-group-item">
         <div class="col-md-8">
-          {% include "app/edit_mark.html" with form=el.form i_id=el.i_id mode=el.mode name=el.name %}
-          <script>updateHandler({{ el.i_id }});</script>
+            {% include "app/edit_mark.html" with form=el.form i_id=el.i_id mode=el.mode name=el.name %}
+            <script>updateHandler({{ el.i_id }});</script>
         </div>
-      </div>
+    </div>
     {% endfor %}
-  </div>
+</div>
 {% endblock %}

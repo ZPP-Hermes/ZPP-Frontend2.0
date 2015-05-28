@@ -1,20 +1,20 @@
 <div id="i_{{ i_id }}">
-  <h3>{{ name }}</h3>
+    <h3>{{ name }}</h3>
 
-  <form id="f_i_{{ i_id }}" action="{% url 'app:commit_edit' i_id %}" method="post" class="form-horizontal">
-    {% csrf_token %}
-    {{ form.errors }}
-    {% for radio in form.mark %}
-      {{ radio }}&nbsp
-    {% endfor %}
-    <input type="submit" value="Zatwierdź" class="btn btn-default"/>
-  </form>
+    <form id="f_i_{{ i_id }}" action="{% url 'app:commit_edit' i_id %}" method="post" class="form-horizontal">
+        {% csrf_token %}
+        {{ form.errors }}
+        {% for radio in form.mark %}
+        {{ radio }}&nbsp
+        {% endfor %}
+        <input type="submit" value="Zatwierdź" class="btn btn-default"/>
+    </form>
 
-  {% if success %}
+    {% if success %}
     <div class="alert alert-success alert-dismissible" role="alert">
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-          aria-hidden="true">&times;</span></button>
-      Sukces
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                aria-hidden="true">&times;</span></button>
+        Sukces
     </div>
-  {% endif %}
+    {% endif %}
 </div>

@@ -8,31 +8,31 @@
         <section id="loginForm">
             <form action="{% url 'app:login' %}" method="post" class="form-horizontal">
                 {% csrf_token %}
-              <h4>Logowanie.</h4>
-              <hr />
+                <h4>Logowanie.</h4>
+                <hr/>
                 <div class="form-group">
-                  <label for="id_username" class="col-md-2 control-label">Nazwa użytkownika</label>
+                    <label for="id_username" class="col-md-2 control-label">Nazwa użytkownika</label>
 
-                  <div class="col-md-10">
+                    <div class="col-md-10">
                         {{ form.username }}
                     </div>
                 </div>
                 <div class="form-group">
-                  <label for="id_password" class="col-md-2 control-label">Hasło</label>
+                    <label for="id_password" class="col-md-2 control-label">Hasło</label>
 
-                  <div class="col-md-10">
+                    <div class="col-md-10">
                         {{ form.password }}
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
-                      {% url 'app:home' as home_url %}
-                      <input type="hidden" name="next" value="{{ next|default:home_url }}"/>
-                      <input type="submit" value="Log in" class="btn btn-default" />
+                        {% url 'app:home' as home_url %}
+                        <input type="hidden" name="next" value="{{ next|default:home_url }}"/>
+                        <input type="submit" value="Log in" class="btn btn-default"/>
                     </div>
                 </div>
                 {% if form.errors %}
-                  <p class="validation-summary-errors">Zła nazwa użytkownika lub hasło.</p>
+                <p class="validation-summary-errors">Zła nazwa użytkownika lub hasło.</p>
                 {% endif %}
             </form>
         </section>
@@ -47,7 +47,7 @@
 
 {% block scripts %}
 
-  {% load staticfiles %}
-  <script src="{% static 'app/scripts/jquery.validate.min.js' %}"></script>
+{% load staticfiles %}
+<script src="{% static 'app/scripts/jquery.validate.min.js' %}"></script>
 
 {% endblock %}
