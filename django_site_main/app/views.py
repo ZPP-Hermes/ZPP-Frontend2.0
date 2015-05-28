@@ -12,6 +12,7 @@ from django.forms import inlineformset_factory
 from django.shortcuts import render, redirect
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
+import json
 from datetime import datetime
 import urlparse
 import oauth2 as oauth
@@ -201,64 +202,174 @@ def grades(request):
                                         })
     )
 
-def parseFormSet(formset):
-    for form in formset.forms:
-        formName = form.prefix + '-' + 'course'
-        courseName = form.data[formName]
-        try:
-            course = Course.objects.get(name=courseName)
-            form.data._mutable = True
-            form.data[formName] = course.id
-            form.data._mutable = False
-        except Exception, e:
-            print e
-            pass
+# def parseFormSet(formset):
+#     for form in formset.forms:
+#         formName = form.prefix + '-' + 'course'
+#         courseName = form.data[formName]
+#         try:
+#             #TODO
+#             course = Course.objects.get(name=courseName)
+#             form.data._mutable = True
+#             form.data[formName] = course.id
+#             form.data._mutable = False
+#         except Exception, e:
+#             print e
+#             pass
+#
+# formset = MarkFormSet(request.POST, request.FILES)
+#         if formset.is_valid():
+#             st = ''
+#             for form in formset.forms:
+#                 #TODO
+#                 st = st + str(form.cleaned_data['course'].id)
+#             return HttpResponse(st)
+#             # success=True
 
-@login_required()
+# @login_required()
 def gradesDynamic(request):
     success = False
     assert isinstance(request, HttpRequest)
-    student = request.user
+
     if request.method == 'POST':
         formset = MarkFormSet(request.POST, request.FILES)
-        formset_validate = MarkFormSet(request.POST, request.FILES)
-
-        parseFormSet(formset_validate)
-        if formset_validate.is_valid():
-            #TODO
-            return HttpResponse("OK!")
-        parseFormSet(formset)
         if formset.is_valid():
+            values = []
+            subjects = Course.objects.all()[0:50]
+
             for form in formset.forms:
-                #TODO
+                for sbj in subjects:
+                    if sbj.id == int(form.cleaned_data['course'].id):
+                        values.append(form.cleaned_data['mark'])
+                    else:
+                        values.append(0)
+                #values.append(form.cleaned_data['subject' + str(i)])
                 pass
-            success=True
-    else:
-        formset = MarkFormSet()
+
+            marks = map(int, values)
+            selectedAlg = map(int, form.cleaned_data['algorithmSub'])
+            selectedAlgSem = map(int, form.cleaned_data['algorithmSem'])
+            #listy na rezultaty zapytan predykcji przedmiotow wg poszczegolnych
+            #algorytmow
+            recommendSubjects1 = []
+            recommendSubjects2 = []
+            recommendSubjects3 = []
+            recommendSubjects4 = []
+            #lista przekazujaca do szablonu rekomendacje seminariow (jesli jakies byly)
+            recommendSem = []
+            #lista na pary nazwa-url wybranych przedmiotow
+            recSubNames1 = []
+            recSubNames2 = []
+            recSubNames3 = []
+            recSubNames4 = []
+            #wybrane algorytmy predykcji przedmiotow - info dla szablonu
+            algorytmy = []
+            #czy student chce predykcji seminariow - info dla szablonu
+            czyPredSem = not (not selectedAlgSem)
+            if (1 in selectedAlg):
+                algorytmy.append(1)
+                recommendSubjects1 = Predictions.getRecomSubStrategy1(marks)
+                for i in range(0,len(recommendSubjects1)):
+                    id_course = recommendSubjects1[i]
+                    course = Course.objects.get(pk=id_course)
+                    recSubNames1.append((course.name,course.url))
+            else:
+                algorytmy.append(None)
+            if (2 in selectedAlg):
+                algorytmy.append(2)
+                recommendSubjects2 = Predictions.getRecomSubStrategy2(marks)
+                for i in range(0,len(recommendSubjects2)):
+                    id_course = recommendSubjects2[i]
+                    course = Course.objects.get(pk=id_course)
+                    link = course.url
+                    recSubNames2.append((course.name,course.url))
+            else:
+                algorytmy.append(None)
+            if (3 in selectedAlg):
+                algorytmy.append(3)
+                recommendSubjects3 = Predictions.getRecomSubStrategy3(marks)
+                for i in range(0,len(recommendSubjects3)):
+                    id_course = recommendSubjects3[i]
+                    course = Course.objects.get(pk=id_course)
+                    recSubNames3.append((course.name,course.url))
+            else:
+                algorytmy.append(None)
+            if (4 in selectedAlg):
+                algorytmy.append(4)
+                recommendSubjects4 = Predictions.getRecomSubStrategy4(marks)
+                for i in range(0,len(recommendSubjects4)):
+                    id_course = recommendSubjects4[i]
+                    course = Course.objects.get(pk=id_course)
+                    recSubNames4.append((course.name,course.url))
+            else:
+                algorytmy.append(None)
+            if (1 in selectedAlgSem):
+                recommendation = Predictions.getRecomSemStrategy1(marks) + 51
+                seminar = Course.objects.get(pk=recommendation)
+                recommendSem.append((seminar.name,seminar.url))
+            else:
+                recommendSem.append(None)
+            if (2 in selectedAlgSem):
+                recommendation = Predictions.getRecomSemStrategy2(marks) + 51
+                seminar = Course.objects.get(pk=recommendation)
+                recommendSem.append((seminar.name,seminar.url))
+            else:
+                recommendSem.append(None)
+            return render(
+                request,
+                'app/gradesResult.html',
+                context_instance=RequestContext(request,
+                                                {
+                                                    'alg': algorytmy,
+                                                    'recomSub1': recSubNames1,
+                                                    'recomSub2': recSubNames2,
+                                                    'recomSub3': recSubNames3,
+                                                    'recomSub4': recSubNames4,
+                                                    'sem'      : czyPredSem,
+                                                    'recomSem' : recommendSem,
+                                                })
+            )
+        return render(
+            request,
+            'app/gradesDynamic.html',
+            context_instance=RequestContext(request,
+                                            {
+                                                'title': 'Oceny',
+                                                'message': 'Wprowadz dane',
+                                                'year': datetime.now().year,
+                                                'formset': formset,
+                                                'success': success
+                                            })
+        )
     return render(
-        request,
-        'app/gradesDynamic.html',
-        context_instance=RequestContext(request,
-                                        {
-                                            'title': 'Oceny',
-                                            'message': 'Wprowadz dane',
-                                            'year': datetime.now().year,
-                                            'formset': formset,
-                                            'success': success
-                                        })
-    )
+            request,
+            'app/gradesDynamic.html',
+            context_instance=RequestContext(request,
+                                            {
+                                                'title': 'Oceny',
+                                                'message': 'Wprowadz dane',
+                                                'year': datetime.now().year,
+                                                'formset': MarkFormSet(),
+                                                'success': success
+                                            })
+        )
 
 @login_required()
 def gradesFilter(request):
     success = False
     assert isinstance(request, HttpRequest)
-    query = request.GET.get('query')
+    query = request.GET.get('term')
     if query is None:
         return HttpResponse('')
 
-    courses = [course.name for course in Course.objects.filter(name__icontains=query)]
+    courses_list = []
+    # courses = [course.name for course in Course.objects.filter(name__icontains=query)]
 
-    return HttpResponse(','.join(courses))
+    for course in list(Course.objects.filter(name__icontains=query)):
+        c_dict = {'id': course.id, 'label': course.name, 'value': course.name}
+        courses_list.append(c_dict)
+
+    # return HttpResponse(','.join(courses))
+    return HttpResponse(json.dumps(courses_list))#, mimetype='application/json'
 
 
 def oauth_init(request):

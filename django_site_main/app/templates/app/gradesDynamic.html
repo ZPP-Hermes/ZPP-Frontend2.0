@@ -20,12 +20,12 @@
         margin-top: 20px;
     }
 
-    .course-input {
+    .course-display {
         width: 300px !important;
     }
 
 
-    .course-input, .mark-select {
+    .course-display, .mark-select {
         position: absolute;
         right: 0px;
     }
@@ -91,17 +91,17 @@
 </style>
 
  <script type="text/javascript">
+    var form_count = 1
+
     $(document).ready(function(){
         function registerFunctions() {
-            $(".course-input").autocomplete({
-                source: function (request, response) {
-                    jQuery.get("filter", {
-                        query: request.term
-                    }, function (data) {
-                        response(data.split(","));
-                    });
-                },
-                minLength: 2
+            $(".course-display").autocomplete({
+                source: "{% url 'app:gradesFilter' %}",
+                minLength: 2,
+                select:function(event, ui) {
+                    course_id = "#" + this.id.replace("_display", "")
+                    $(course_id).val(ui.item.id)
+                }
             });
 
             $(".tile").click(function() {
@@ -112,6 +112,11 @@
                 mark_form = $(this.parentNode.parentNode).find(".mark-select")[0]
                 $(mark_form).val(selected_mark)
             });
+
+            courses_to_hide = $(".course-input")
+            for (i = 0; i < courses_to_hide.length; i++) {
+                $(courses_to_hide[i].parentNode).css("display", "none")
+            }
         }
 
         clean_tile_copy = $($("#tile-template")[0]).clone()[0]
@@ -122,9 +127,13 @@
 
         clean_sel_copy = $($(".mark-select")[0].parentElement).clone()[0]
         clean_inp_copy = $($(".course-input")[0].parentElement).clone()[0]
+        clean_dsp_copy = $($(".course-display")[0].parentElement).clone()[0]
 
 
         $("#add-form").click(function(){
+            form_count++
+            $("#id_form-TOTAL_FORMS").val(form_count)
+
             inputs_list = $(".course-input")
             last_input = inputs_list[inputs_list.length - 1]
             last_index = parseInt(last_input.id.match(/\d+/)[0])
@@ -135,12 +144,23 @@
 
             new_input = $($(clean_inp_copy).clone()[0])
             id = new_input.find("input")[0].id.replace(/\d+/, new_index)
+            name = new_input.find("input")[0].name.replace(/\d+/, new_index)
             new_input.find("input")[0].id = id
+            new_input.find("input")[0].name = name
             new_input.insertBefore("#add-form")
+
+            new_display = $($(clean_dsp_copy).clone()[0])
+            id = new_display.find("input")[0].id.replace(/\d+/, new_index)
+            name = new_display.find("input")[0].name.replace(/\d+/, new_index)
+            new_display.find("input")[0].id = id
+            new_display.find("input")[0].name = name
+            new_display.insertBefore("#add-form")
 
             new_select = $($(clean_sel_copy).clone()[0])
             id = new_select.find("select")[0].id.replace(/\d+/, new_index)
+            name = new_select.find("select")[0].name.replace(/\d+/, new_index)
             new_select.find("select")[0].id = id
+            new_select.find("select")[0].name=name
             new_select.insertBefore("#add-form")
 
             registerFunctions()

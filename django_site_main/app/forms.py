@@ -26,17 +26,36 @@ class HorizontalRadioRenderer(forms.RadioSelect.renderer):
 
 
 class MarkForm(ModelForm):
+    _algorithmSub = [(1,'strategia wykorzystujaca algorytm regulowy'),(2,'lista priorytetowa najlatwiejszych przedmiotow'),
+        (3,'dobierz w sposob losowy'),(4,'strategia najblizszych sasiadow')]
+    _algorithmSem = [(1,'strategia wykorzystujaca algorytm lasow losowych'),(2,'strategia najblizszych sasiadow')]
+
+    algorithmSub = forms.MultipleChoiceField(required=False,
+        widget=forms.CheckboxSelectMultiple, choices=_algorithmSub,label="Wybierz algorytm predykcji przedmiotow")
+    algorithmSem = forms.MultipleChoiceField(required=False,
+        widget=forms.CheckboxSelectMultiple, choices=_algorithmSem,label="Wybierz algorytm predykcji seminariow")
+    course_display = forms.CharField(max_length=100)
+
     class Meta:
         model = Mark
-        fields = ['course', 'mark']
+        fields = ['algorithmSub', 'algorithmSem', 'course', 'course_display', 'mark']
         widgets = {
-            'course': TextInput(attrs={'class': 'course-input', }),
+            # 'course': forms.Input(attrs={'class': 'course-input', }),
+            # 'course_display': forms.TextInput(attrs={'class': 'course-display', }),
             'mark': Select(attrs={'class': 'mark-select', })
 
         }
 
+    def __init__(self, *args, **kwargs):
+        super(MarkForm, self).__init__(*args, **kwargs)
+        self.fields['course_display'].label = "Przedmiot"
+        self.fields['course_display'].widget = forms.TextInput(attrs={'class': 'course-display', })
 
-MarkFormSet = formset_factory(MarkForm, extra=1)
+        self.fields['course'].widget = TextInput(attrs={'class': 'course-input', })
+        self.fields['mark'].label = "Ocena"
+
+
+MarkFormSet = formset_factory(MarkForm)
 
 
 class SavedMarkForm(forms.ModelForm):
