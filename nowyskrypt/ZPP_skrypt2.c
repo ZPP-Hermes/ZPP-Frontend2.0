@@ -24,14 +24,14 @@
 		"Algorytmy tekstowe", "Weryfikacja wspomagana komputerowo", "Wnioskowanie w serwisach i systemach informatycznych", "Teoria informacji", "Kryptografia",
 		"Matematyka obliczeniowa 2", "Statystyka 2", "Rachunek prawdopodobieństwa 2", "Optymalizacja 1"};
 	char nazwysem[10][60] = {"Systemy rozproszone", "Języki programowania", "Zagadnienia programowania obiektowego", "Wybrane aspekty inżynierii oprogramowania",
-		"Analiza, wizualizacja i optymalizacja oprogramowania", "Innowacyjne zastosowania informatyki", "Molekularna biologia obliczeniowa", "Bazy danych",
+		"Analiza, wizualizacja i optymalizacja oprogramowania", "Innowacyjne zastosowania informatyki", "Molekularna biologia obliczeniowa", "Metody numeryczne",
 		"Algorytmika", "Matematyka w informatyce"};
 	char urlobow[30][20] = {"1000-223bJNP1", "1000-224bJNP2", "1000-225bJNP3", "1000-214bWWW", "1000-222bIPP", "1000-214bIOP", "1000-213bSOP", "1000-214bSIK", "1000-215bBSK",
 		  "1000-216bJPP", "1000-212bPO", "1000-213bBAD", "1000-211bWPI", "1000-212bAKS", "1000-214bPSZ", "1000-213bASD", "1000-214bJAO", "1000-215bSWP", "1000-211bPM","1000-215bMNU",
 		 "1000-212bMD", "1000-211bAM1", "1000-212bAM2", "1000-213bRPS", "1000-211bGAL", "1000-114bRP1a", "1000-115ST1a", "1000-113bAG1a", "1000-114bRRZa", "1000-113bTP1a"};
 	char urlobier[20][20] = {"1000-2N09ZSO", "1000-2M08PMK", "1000-2N09KDW", "1000-2M13PDD", "1000-2N00PLO", "1000-2N03BO", "1000-2N09ZBD", "1000-2N09SUS", "1000-2N00SID",
 		"1000-2M03DM", "1000-2N00ALG", "1000-2N09ALT", "1000-2N09WWK", "1000-2N09WSS", "1000-2N03TI", "1000-2M12KI1", "1000-135MO2", "1000-135ST2", "1000-135RP2", "1000-134OP1"};
-	char urlsem[10][20] = {"1000-2D97SR", "1000-2D13JP", "1000-2D03PO", "1000-2D97IO", "1000-2D11WSI", "1000-2D10IZI", "1000-5D97MB", "1000-2D97DB", "1000-2D97AL", "1000-5D96MI"}; 
+	char urlsem[10][20] = {"1000-2D97SR", "1000-2D13JP", "1000-2D03PO", "1000-2D97IO", "1000-2D11WSI", "1000-2D10IZI", "1000-5D97MB", "1000-1L09MN", "1000-2D97AL", "1000-5D96MI"}; 
 	int hardness[60] = {1,-4,-4,0,1,0,3,3,2,3,1,-2,0,-5,-4,0,-2,0,-2,-1,1,-1,-1,0,1,1,1,2,3,2,5,4,2,2,1,1,1,2,-1,1,2,1,-1,1,1,0,3,3,2,-1,0,0,0,0,0,0,0,0,0,0};
 	int marks[7][60];
 	int ext[2][7]={{1,8,21,40,70,95,100},{60,82,92,97,99,100,100}};
