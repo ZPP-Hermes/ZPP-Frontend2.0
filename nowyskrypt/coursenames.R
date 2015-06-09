@@ -1,0 +1,11 @@
+coursenames <- c("Języki i narzędzia programowania 1", "Języki i narzędzia programowania 2", "Języki i narzędzia programowania 3", "Aplikacje WWW",
+		"Indywidualny projekt programistyczny", "Inżynieria oprogramowania", "Systemy operacyjne", "Sieci komputerowe", "Bezpieczeństwo systemów komputerowych", 
+		"Języki i paradygmaty programowania", "Programowanie obiektowe", "Bazy Danych", "Wstęp do programowania", "Architektura komputerów i sieci",
+		"Problemy społeczne i zawodowe informatyki", "Algorytmy i struktury danych", "Języki, automaty i obliczenia", "Semantyka i weryfikacja programów", "Podstawy matematyki",
+		"Matematyka dyskretna", "Metody numetyczne", "Analiza matematyczna dla informatyków 1", "Analiza matematyczna dla informatyków 2", "Raczhunek prawdopodobieństwa i statystyka",
+		 "Geometria z algebrą liniową", "Rachunek prawdopodobieństwa 1", "Statystyka 1", "Algebra 1", "Równania różniczkowe zwyczajne", "Topologia 1","Zaawansowane systemy operacyjne", "Programowanie mikrokontrolerów", "Kompresja danych", "Przetwarzanie dużych danych",
+		"Programowanie w logice", "Wstęp do biologii obliczeniowej", "Zaawansowane bazy danych", "Systemy uczące się", "Sztuczna inteligencja i systemy doradcze", "Data mining", "Algorytmika",
+		"Algorytmy tekstowe", "Weryfikacja wspomagana komputerowo", "Wnioskowanie w serwisach i systemach informatycznych", "Teoria informacji", "Kryptografia",
+		"Matematyka obliczeniowa 2", "Statystyka 2", "Rachunek prawdopodobieństwa 2", "Optymalizacja 1","Systemy rozproszone", "Języki programowania", "Zagadnienia programowania obiektowego", "Wybrane aspekty inżynierii oprogramowania",
+		"Analiza, wizualizacja i optymalizacja oprogramowania", "Innowacyjne zastosowania informatyki", "Molekularna biologia obliczeniowa", "Algorytmika",
+		"Metody numeryczne","Matematyka w informatyce")
