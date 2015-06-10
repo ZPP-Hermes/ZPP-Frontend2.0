@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 Definition of forms.
 """
@@ -87,6 +88,16 @@ class GradesForm(forms.Form):
                    (2, 'lista priorytetowa najlatwiejszych przedmiotow'),
                    (3, 'dobierz w sposob losowy'), (4, 'strategia najblizszych sasiadow')]
         algsSem = [(1, 'strategia wykorzystujaca algorytm lasow losowych'), (2, 'strategia najblizszych sasiadow')]
+        subs = [(31,"Zaawansowane systemy operacyjne"), (32,"Programowanie mikrokontrolerow"), (33,"Kompresja danych"),
+                    (34,"Przetwarzanie duzych danych"),
+                    (35,"Programowanie w logice"), (36,"Wstęp do biologii obliczeniowej"),
+                    (37,"Zaawansowane bazy danych"), (38,"Systemy uczące się"), (39,"Sztuczna inteligencja i systemy doradcze"),
+                    (40,"Data mining"), (41,"Algorytmika"),
+                    (42,"Algorytmy tekstowe"), (43,"Weryfikacja wspomagana komputerowo"),
+                    (44,"Wnioskowanie w serwisach i systemach informatycznych"),
+                    (45,"Teoria informacji"), (46,"Kryptografia"),
+                    (47,"Matematyka obliczeniowa 2"), (48,"Statystyka 2"),
+                    (49,"Rachunek prawdopodobienstwa 2"), (50,"Optymalizacja 1")]
         super(GradesForm, self).__init__(*args, **kwargs)
         subjects = Course.objects.all()[0:50]
         i = 0
@@ -99,6 +110,8 @@ class GradesForm(forms.Form):
         self.fields['algorithmSem'] = forms.MultipleChoiceField(required=False,
                                                                 widget=forms.CheckboxSelectMultiple, choices=algsSem,
                                                                 label="Wybierz algorytm predykcji seminariow")
+        self.fields['markSubject'] = forms.ChoiceField(required=False,choices=subs,
+                                                                label="Wybierz przedmiot do predykcji oceny")
 
     def as_p(self):
         return self._html_output(

@@ -65,3 +65,8 @@ def getRecomSemStrategy2(marks):
     recomSem = conn.r('recomNearestSem(10,gotMarks)')
     return int(recomSem)+50
 
+def predictMark(marks, subject):
+    conn.r.gotMarks = marks
+    conn.r.subject = subject
+    predictMark = conn.r('recomNearestMarks(gotMarks, subject)')
+    return int(predictMark)

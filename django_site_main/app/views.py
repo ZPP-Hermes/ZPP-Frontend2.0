@@ -110,6 +110,7 @@ def grades(request):
             marks = map(int, values)
             selectedAlg = map(int, form.cleaned_data['algorithmSub'])
             selectedAlgSem = map(int, form.cleaned_data['algorithmSem'])
+            selectedSub = int(form.cleaned_data['markSubject'])
             #listy na rezultaty zapytan predykcji przedmiotow wg poszczegolnych
             #algorytmow
             recommendSubjects1 = []
@@ -176,6 +177,7 @@ def grades(request):
                 recommendSem.append((seminar.name, seminar.url))
             else:
                 recommendSem.append(None)
+            predMark = Predictions.predictMark(marks, selectedSub)/2
             return render(
                 request,
                 'app/gradesResult.html',
@@ -188,6 +190,7 @@ def grades(request):
                                                     'recomSub4': recSubNames4,
                                                     'sem': czyPredSem,
                                                     'recomSem': recommendSem,
+                                                    'predMark': predMark,
                                                 })
             )
 

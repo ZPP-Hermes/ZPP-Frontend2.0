@@ -72,7 +72,7 @@ class Rscript():
       A <- A[order(A[,1], decreasing=TRUE),]
       studNotChosen <- which(student == 0)
       recom <- A[A[,2] %in% studNotChosen,2]
-      return(recom)
+      return(as.list(recom))
     }'''
     knn='''dist <- function(v,w) {
       sum <- 0
@@ -100,13 +100,13 @@ class Rscript():
         nbSub <- which(data[bestNb[i],] > 0)
         recom <- unique(c(recom, nbSub[nbSub %in% studNotChosen]))
       }
-      return(recom)
+      return(as.list(recom))
     }'''
     random='''random <- function(student) {
       studNotChosen <- which(student == 0)
       n <- length(studNotChosen)
       recom <- sample(studNotChosen,prob=rep(1,n))[1:(n/2)]
-      return(recom)
+      return(as.list(recom))
     }'''
     dataGen='''data1 <- data.matrix(data1)
     data1 <- data1[,2:4]
