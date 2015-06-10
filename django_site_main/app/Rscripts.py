@@ -105,8 +105,10 @@ class Rscript():
     random='''random <- function(student) {
       studNotChosen <- which(student == 0)
       n <- length(studNotChosen)
+      if (n == 0) {return(list())}
+      else {
       recom <- sample(studNotChosen,prob=rep(1,n))[1:(n/2)]
-      return(as.list(recom))
+      return(as.list(recom)) }
     }'''
     dataGen='''data1 <- data.matrix(data1)
     data1 <- data1[,2:4]
@@ -152,7 +154,10 @@ class Rscript():
       marks <- data[bestNb,subject][data[bestNb,subject] > 0]
       if (length(marks)>0)
       {
-        return(round(mean(marks)))
+        m <- round(mean(marks))
+        if (m == 5)
+            return(6)
+        return(m)
       }
       else
       {
