@@ -27,11 +27,12 @@ conn.r(Rscripts.Rscript.knn)
 conn.r(Rscripts.Rscript.random)
 conn.r(Rscripts.Rscript.semKnn)
 conn.r(Rscripts.Rscript.semRf)
+conn.r(Rscripts.Rscript.marksKnn)
 
 #strategie predykcyjne
 def getRecomSubStrategy1(marks):
     conn.r.gotMarks = marks[30:50]
-    recommendSubjects = conn.r('getRecomSub(which(gotMarks>0),0.5)')
+    recommendSubjects = conn.r('getRecomSub(which(gotMarks>0),1)')
     recom = map(lambda x:int(x)+30, recommendSubjects)
     return recom
 
@@ -49,18 +50,18 @@ def getRecomSubStrategy3(marks):
     return recom
 
 def getRecomSubStrategy4(marks):
-    conn.r.gotMarks = marks[30:50]
+    conn.r.gotMarks = marks
     recommendSubjects = conn.r('recomNearestSub(5,gotMarks)')
-    recom = map(lambda x:int(x)+30, recommendSubjects)
+    recom = map(int, recommendSubjects)
     return recom
 
 def getRecomSemStrategy1(marks):
     conn.r.gotMarks = marks
     recomSem = conn.r('predictRf(gotMarks)')
-    return int(recomSem)
+    return int(recomSem)+50
 
 def getRecomSemStrategy2(marks):
     conn.r.gotMarks = marks
-    recomSem = conn.r('recomNearestSem(8,gotMarks)')
-    return int(recomSem)
+    recomSem = conn.r('recomNearestSem(10,gotMarks)')
+    return int(recomSem)+50
 

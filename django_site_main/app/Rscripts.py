@@ -3,19 +3,10 @@ import os
 cwd = os.getcwd()
 
 class Rscript():
-    arules = '''
-    #data <- matrix(sample(c(0,4,6,7,8,9,10,11),10000*51,prob=c(2,rep(1,7)),replace=TRUE),10000,51)
-    trainingIdx = sample(1:nrow(data), round(3*(nrow(data)/5)))
+    arules = '''library(arules)
     obow <- as.matrix(data[,1:30])
     obier <- as.matrix(data[,31:50])
     sem <- as.matrix(data[,51])
-
-    #-----------reguly dla przedmiotow obieralnych---------------------
-
-    #tworzenie koszykow przedmiotow obieralnych
-    #install.packages('arules')
-    library(arules)
-
     colnames(obier) <- NULL
     rows <- dim(obier)[1]
     l <- list()
@@ -28,8 +19,8 @@ class Rscript():
     #szukanie regul dla przedmiotow obieralnych, postaci jesli ktos co wzial to prawdopodobnie wzial rowniez to
     #bestObier = sort(itemFrequency(koszykObier)[which(itemFrequency(koszykObier) >= sort(itemFrequency(koszykObier), decreasing = T)[5])], decreasing = TRUE)
 
-    ruleObier = apriori(koszykObier, parameter = list(supp = 0.0005, conf = 0.9, minlen = 2,
-    target = "rules", originalSupport = FALSE), appearance = NULL, control = list(sort = -1))
+    ruleObier = apriori(koszykObier, parameter = list(supp = 0.001, conf = 0.9, minlen = 2,
+                                                      target = "rules", originalSupport = FALSE), appearance = NULL, control = list(sort = -1))
 
     ruleObier = sort(ruleObier, decreasing = T, by = "lift")
 
@@ -44,28 +35,28 @@ class Rscript():
       rules <- ruleObier
       if (n > 0)
       {
-          for (i in 1:n)
+        for (i in 1:n)
+        {
+          rules = subset(rules, lhs %in% paste(student[i]))
+        }
+        if (length(rules) > 0) {
+          subMatr <- as(rhs(rules), "matrix")
+          m <- dim(subMatr)[1]
+          recomSub <- vector()
+          for (i in 1:m)
           {
-            rules = subset(rules, lhs %in% paste(student[i]))
+            recomSub <- c(recomSub, which(subMatr[i,]>0))
           }
-          if (length(rules) > 0) {
-            subMatr <- as(rhs(rules), "matrix")
-            m <- dim(subMatr)[1]
-            recomSub <- vector()
-            for (i in 1:m)
-            {
-              recomSub <- c(recomSub, which(subMatr[i,]>0))
-            }
-            recomSub <- sort(unique(recomSub))
-            studNotChosen <- which(student == 0)
-            recomSub <- recomSub[recomSub %in% studNotChosen]
-          }
-          else {
-            recomSub = c()
-          }
+          recomSub <- sort(unique(recomSub))
+          studNotChosen <- c(1:20)[-student]
+          recomSub <- recomSub[recomSub %in% studNotChosen]
+        }
+        else {
+          recomSub = c()
+        }
       }
       else {
-          recomSub = c()
+        recomSub = c()
       }
       return(as.list(recomSub))
     }'''
@@ -100,15 +91,13 @@ class Rscript():
       n <- dim(data)[1]
       A <- matrix(0,n,2)
       student <- unlist(student)
-      for (i in 1:n) {
-        A[i,1] <- dist(student,data[i,])
-        A[i,2] <- i
-      }
+      A[,1] <- unlist(lapply(1:n, function(i) {dist(student,data[i,])}))
+      A[,2] <- c(1:n)
       bestNb <- A[order(A[,1])[1:k],2]
       studNotChosen <- which(student == 0)
       recom <- c()
       for (i in 1:length(bestNb)) {
-        nbSub <- which(data[bestNb[i],31:50] > 0)
+        nbSub <- which(data[bestNb[i],] > 0)
         recom <- unique(c(recom, nbSub[nbSub %in% studNotChosen]))
       }
       return(recom)
@@ -152,4 +141,21 @@ class Rscript():
     classifierf<-randomForest(data[,1:50], data[,51])
     predictRf <- function(student) {
       return(round(predict(classifierf, student)))
+    }'''
+    marksKnn='''recomNearestMarks <- function(student, subject) {
+      student <- unlist(student)
+      n <- dim(data)[1]
+      A <- matrix(0,n,2)
+      A[,1] <- unlist(lapply(1:n, function(i) {dist(student,data[i,])}))
+      A[,2] <- c(1:n)
+      bestNb <- A[order(A[,1])[1:100],2]
+      marks <- data[bestNb,subject][data[bestNb,subject] > 0]
+      if (length(marks)>0)
+      {
+        return(round(mean(marks)))
+      }
+      else
+      {
+        return(sample(4:11,1,prob=c(5,3,2,1,1,1,1,1)))
+      }
     }'''

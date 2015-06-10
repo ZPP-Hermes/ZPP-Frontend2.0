@@ -165,13 +165,13 @@ def grades(request):
             else:
                 algorytmy.append(None)
             if (1 in selectedAlgSem):
-                recommendation = Predictions.getRecomSemStrategy1(marks) + 51
+                recommendation = Predictions.getRecomSemStrategy1(marks)
                 seminar = Course.objects.get(pk=recommendation)
                 recommendSem.append((seminar.name, seminar.url))
             else:
                 recommendSem.append(None)
             if (2 in selectedAlgSem):
-                recommendation = Predictions.getRecomSemStrategy2(marks) + 51
+                recommendation = Predictions.getRecomSemStrategy2(marks)
                 seminar = Course.objects.get(pk=recommendation)
                 recommendSem.append((seminar.name, seminar.url))
             else:
