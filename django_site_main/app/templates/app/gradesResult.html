@@ -1,64 +1,80 @@
 {% extends "app/layout.html" %}
 
 {% block content %}
-
+ 
 
 {% if alg.0 %}
-<h2> Algorytm regulowy </h2>
-<h3> Lista proponowanych przedmiotow: </h3>
+<h2> Algorytm regułowy </h2>
+<h3> Lista proponowanych przedmiotów: </h3>
 <ol>
-    {% for name,url in recomSub1 %}
+    {% for name,url,avg,chance,proc in recomSub1 %}
     <li>
-        <h4> {{ name }}
-            <h4>
+    <h4> {{ name }} <font size="3"> &nbsp;&nbsp; <a href="javascript:pokazUkryj('{{ name }}','{{url}}')" id="{{url}}">info</a> </font> </h4>
+    <div id="{{ name }}" style="display:none">
                 <h5>
                     <a href="https://usosweb.mimuw.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod={{ url }}">
                         Strona przedmiotu </a></h5>
+                <h5>Średnia z ocen: {{avg}} </h5>  
+                <h5>Procentowa zdawalność: {{chance}} % </h5>
+                <h5>Procent zapisanych studentów: {{proc}} % </h5> 
+    </div>
     </li>
     {% endfor %}
 </ol>
 {% endif %}
 {% if alg.1 %}
-<h2> Najlatwiejsze przedmioty </h2>
-<h3> Lista proponowanych przedmiotow: </h3>
+<h2> Najłatwiejsze przedmioty </h2>
+<h3> Lista proponowanych przedmiotów: </h3>
 <ol>
-    {% for name,url in recomSub2 %}
+    {% for name,url,avg,chance,proc in recomSub2 %}
     <li>
-        <h4> {{ name }}
-            <h4>
+    <h4> {{ name }} <font size="3"> &nbsp;&nbsp; <a href="javascript:pokazUkryj('{{ name }}','{{url}}')" id="{{url}}">info</a> </font> </h4>
+    <div id="{{ name }}" style="display:none">
                 <h5>
                     <a href="https://usosweb.mimuw.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod={{ url }}">
                         Strona przedmiotu </a></h5>
+                <h5>Średnia z ocen: {{avg}} </h5>  
+                <h5>Procentowa zdawalność: {{chance}} % </h5>
+                <h5>Procent zapisanych studentów: {{proc}} % </h5> 
+    </div>
     </li>
     {% endfor %}
 </ol>
 {% endif %}
 {% if alg.2 %}
-<h2> Szczesliwy traf </h2>
-<h3> Lista proponowanych przedmiotow: </h3>
+<h2> Szczęśliwy traf </h2>
+<h3> Lista proponowanych przedmiotów: </h3>
 <ol>
-    {% for name,url in recomSub3 %}
+    {% for name,url,avg,chance,proc in recomSub3 %}
     <li>
-        <h4> {{ name }}
-            <h4>
+    <h4> {{ name }} <font size="3"> &nbsp;&nbsp; <a href="javascript:pokazUkryj('{{ name }}','{{url}}')" id="{{url}}">info</a> </font> </h4>
+    <div id="{{ name }}" style="display:none">
                 <h5>
                     <a href="https://usosweb.mimuw.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod={{ url }}">
                         Strona przedmiotu </a></h5>
+                <h5>Średnia z ocen: {{avg}} </h5>  
+                <h5>Procentowa zdawalność: {{chance}} % </h5>
+                <h5>Procent zapisanych studentów: {{proc}} % </h5> 
+    </div>
     </li>
     {% endfor %}
 </ol>
 {% endif %}
 {% if alg.3 %}
-<h2> Strategia najblizszych sasiadow </h2>
-<h3> Lista proponowanych przedmiotow: </h3>
+<h2> Strategia najbliższych sasiadów </h2>
+<h3> Lista proponowanych przedmiotów: </h3>
 <ol>
-    {% for name,url in recomSub4 %}
+    {% for name,url,avg,chance,proc in recomSub4 %}
     <li>
-        <h4> {{ name }}
-            <h4>
+    <h4> {{ name }} <font size="3"> &nbsp;&nbsp; <a href="javascript:pokazUkryj('{{ name }}','{{url}}')" id="{{url}}">info</a> </font> </h4>
+    <div id="{{ name }}" style="display:none">
                 <h5>
                     <a href="https://usosweb.mimuw.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod={{ url }}">
                         Strona przedmiotu </a></h5>
+                <h5>Średnia z ocen: {{avg}} </h5>  
+                <h5>Procentowa zdawalność: {{chance}} % </h5>
+                <h5>Procent zapisanych studentów: {{proc}} % </h5> 
+    </div>
     </li>
     {% endfor %}
 </ol>
@@ -70,25 +86,52 @@
 {% if recomSem.0 %}
 <h3>Seminarium rekomendowane wg algorytmu lasów losowych </h3>
 <ul>
-    <h4>{{ recomSem.0.0 }}</h4>
-    <h5>
-        <a href="https://usosweb.mimuw.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod={{ recomSem.0.1  }}">
-            Strona przedmiotu </a></h5>
+
+    <h4> {{ recomSem.0.0 }} <font size="3"> &nbsp;&nbsp; <a href="javascript:pokazUkryj('{{ recomSem.0.0 }}','{{ recomSem.0.1 }}')" id="{{url}}">info</a> </font> </h4>
+    <div id="{{ name }}" style="display:none">
+        <h5>
+            <a href="https://usosweb.mimuw.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod={{ recomSem.0.1  }}">
+                Strona przedmiotu </a></h5>
+        <h5>Średnia z ocen: {{recomSem.0.2}} </h5>  
+        <h5>Procentowa zdawalność: {{recomSem.0.3}} % </h5>
+        <h5>Procent zapisanych studentów: {{recomSem.0.4}} % </h5> 
+    </div>
 </ul>
 {% endif %}
 
 {% if recomSem.1 %}
 <h3>Seminarium rekomendowane wg strategii najbliższych sąsiadów </h3>
 <ul>
-    <h4>{{ recomSem.1.0 }}</h4>
-    <h5>
-        <a href="https://usosweb.mimuw.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod={{ recomSem.1.1 }}">
-            Strona przedmiotu </a></h5>
+    <h4> {{ recomSem.1.0 }} <font size="3"> &nbsp;&nbsp; <a href="javascript:pokazUkryj('{{ recomSem.1.0 }}','{{ recomSem.1.1 }}')" id="{{url}}">info</a> </font> </h4>
+    <div id="{{ name }}" style="display:none">
+        <h5>
+            <a href="https://usosweb.mimuw.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod={{ recomSem.1.1  }}">
+                Strona przedmiotu </a></h5>
+        <h5>Średnia z ocen: {{recomSem.1.2}} </h5>  
+        <h5>Procentowa zdawalność: {{recomSem.1.3}} % </h5>
+        <h5>Procent zapisanych studentów: {{recomSem.1.4}} % </h5> 
+    </div>
 </ul>
 {% endif %}
 
 {% endif %}
     <h3>Proponowana ocena z wybranego przedmiotu</h3>
     <h4>{{ predMark }}</h4>
+
+
+
+
+<!-- zrodlo : http://www.forumweb.pl/html/rozwin-zwin-temat,21393 -->
+<script type="text/javascript">
+<!--
+function pokazUkryj(id,id2)
+{
+document.getElementById(id).style.display = (document.getElementById(id).style.display == "none") ? "block" : "none";
+document.getElementById(id2).innerHTML = (document.getElementById(id2).innerHTML === "info") ? "zwin" : "info";
+}
+-->
+</script>
+
+
 
 {% endblock %}
