@@ -1,4 +1,5 @@
 # coding=utf-8
+from __future__ import division
 """
 Definition of views.
 """
@@ -134,26 +135,28 @@ def grades(request):
                 for i in range(0, len(recommendSubjects1)):
                     id_course = recommendSubjects1[i]
                     course = Course.objects.get(pk=id_course)
-                    recSubNames1.append((course.name, course.url))
+                    (avg,chance,part) = courseStat(course)
+                    recSubNames1.append((course.name, course.url, avg, chance, part))
             else:
                 algorytmy.append(None)
             if (2 in selectedAlg):
                 algorytmy.append(2)
-                recommendSubjects2 = Predictions.getRecomSubStrategy2(marks)
+                recommendSubjects2 = Predictions.getRecomSubStrategy2(marks)[:5]
                 for i in range(0, len(recommendSubjects2)):
                     id_course = recommendSubjects2[i]
                     course = Course.objects.get(pk=id_course)
-                    link = course.url
-                    recSubNames2.append((course.name, course.url))
+                    (avg,chance,part) = courseStat(course)
+                    recSubNames2.append((course.name, course.url,avg, chance, part))
             else:
                 algorytmy.append(None)
             if (3 in selectedAlg):
                 algorytmy.append(3)
-                recommendSubjects3 = Predictions.getRecomSubStrategy3(marks)
+                recommendSubjects3 = Predictions.getRecomSubStrategy3(marks)[:5]
                 for i in range(0, len(recommendSubjects3)):
                     id_course = recommendSubjects3[i]
                     course = Course.objects.get(pk=id_course)
-                    recSubNames3.append((course.name, course.url))
+                    (avg,chance,part) = courseStat(course)
+                    recSubNames3.append((course.name, course.url,avg, chance, part))
             else:
                 algorytmy.append(None)
             if (4 in selectedAlg):
@@ -162,19 +165,22 @@ def grades(request):
                 for i in range(0, len(recommendSubjects4)):
                     id_course = recommendSubjects4[i]
                     course = Course.objects.get(pk=id_course)
-                    recSubNames4.append((course.name, course.url))
+                    (avg,chance,part) = courseStat(course)
+                    recSubNames4.append((course.name, course.url,avg, chance, part))
             else:
                 algorytmy.append(None)
             if (1 in selectedAlgSem):
                 recommendation = Predictions.getRecomSemStrategy1(marks)
                 seminar = Course.objects.get(pk=recommendation)
-                recommendSem.append((seminar.name, seminar.url))
+                (avg,chance,part) = courseStat(seminar)
+                recommendSem.append((seminar.name, seminar.url,avg,chance,part))
             else:
                 recommendSem.append(None)
             if (2 in selectedAlgSem):
                 recommendation = Predictions.getRecomSemStrategy2(marks)
                 seminar = Course.objects.get(pk=recommendation)
-                recommendSem.append((seminar.name, seminar.url))
+                (avg,chance,part) = courseStat(seminar)
+                recommendSem.append((seminar.name, seminar.url,avg,chance,part))
             else:
                 recommendSem.append(None)
             predMark = Predictions.predictMark(marks, selectedSub)/2
@@ -205,6 +211,34 @@ def grades(request):
                                             'GradesForm': GradesForm(),
                                         })
     )
+
+
+#liczy statystyki ocenowe i zwraca krotke (srednia ocen,zdawalnosc,procent zapisanych studentow)
+def courseStat(course):
+    #liczba studentow zapisanych na kurs
+    uczestnicy = 0
+    #liczba wystapien danej oceny
+    dwojki = course.mark4
+    uczestnicy = uczestnicy + dwojki
+    trojki = course.mark6
+    uczestnicy = uczestnicy + trojki
+    trojPl = course.mark7
+    uczestnicy = uczestnicy + trojPl
+    czworki = course.mark8
+    uczestnicy = uczestnicy + czworki 
+    czwPl = course.mark9
+    uczestnicy = uczestnicy + czwPl
+    piatki = course.mark10
+    uczestnicy = uczestnicy + piatki
+    szostki = course.mark11
+    uczestnicy = uczestnicy + szostki
+    srednia_ocena = (2*dwojki+3*trojki+3.5*trojPl+4*czworki+
+        4.5*czwPl+5*piatki+5.5*szostki)/uczestnicy
+    szansa_zal = ((uczestnicy-dwojki)*100)/uczestnicy
+    l_studentow = Student.objects.count()
+    proc_zapis = (uczestnicy*100)/l_studentow
+    return (round(srednia_ocena,2),round(szansa_zal,2),round(proc_zapis,2))    
+
 
 
 
