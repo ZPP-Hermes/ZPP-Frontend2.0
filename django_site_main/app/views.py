@@ -136,7 +136,7 @@ def grades(request):
                     id_course = recommendSubjects1[i]
                     course = Course.objects.get(pk=id_course)
                     (avg,chance,part) = courseStat(course)
-                    recSubNames1.append((course.name, course.url, avg, chance, part))
+                    recSubNames1.append((course.name, course.url, avg, chance, part,course.name+"alg1",course.url+"alg1"))
             else:
                 algorytmy.append(None)
             if (2 in selectedAlg):
@@ -146,7 +146,7 @@ def grades(request):
                     id_course = recommendSubjects2[i]
                     course = Course.objects.get(pk=id_course)
                     (avg,chance,part) = courseStat(course)
-                    recSubNames2.append((course.name, course.url,avg, chance, part))
+                    recSubNames2.append((course.name, course.url,avg, chance, part,course.name+"alg2",course.url+"alg2"))
             else:
                 algorytmy.append(None)
             if (3 in selectedAlg):
@@ -156,7 +156,7 @@ def grades(request):
                     id_course = recommendSubjects3[i]
                     course = Course.objects.get(pk=id_course)
                     (avg,chance,part) = courseStat(course)
-                    recSubNames3.append((course.name, course.url,avg, chance, part))
+                    recSubNames3.append((course.name, course.url,avg, chance, part,course.name+"alg3",course.url+"alg3"))
             else:
                 algorytmy.append(None)
             if (4 in selectedAlg):
@@ -166,21 +166,21 @@ def grades(request):
                     id_course = recommendSubjects4[i]
                     course = Course.objects.get(pk=id_course)
                     (avg,chance,part) = courseStat(course)
-                    recSubNames4.append((course.name, course.url,avg, chance, part))
+                    recSubNames4.append((course.name, course.url,avg, chance, part,course.name+"alg4",course.url+"alg4"))
             else:
                 algorytmy.append(None)
             if (1 in selectedAlgSem):
                 recommendation = Predictions.getRecomSemStrategy1(marks)
                 seminar = Course.objects.get(pk=recommendation)
                 (avg,chance,part) = courseStat(seminar)
-                recommendSem.append((seminar.name, seminar.url,avg,chance,part))
+                recommendSem.append((seminar.name, seminar.url,avg,chance,part,course.name+"salg1",course.url+"salg1"))
             else:
                 recommendSem.append(None)
             if (2 in selectedAlgSem):
                 recommendation = Predictions.getRecomSemStrategy2(marks)
                 seminar = Course.objects.get(pk=recommendation)
                 (avg,chance,part) = courseStat(seminar)
-                recommendSem.append((seminar.name, seminar.url,avg,chance,part))
+                recommendSem.append((seminar.name, seminar.url,avg,chance,part,course.name+"salg2",course.url+"salg2"))
             else:
                 recommendSem.append(None)
             predMark = Predictions.predictMark(marks, selectedSub)/2
