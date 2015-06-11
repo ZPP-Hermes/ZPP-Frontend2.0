@@ -106,9 +106,9 @@ class Rscript():
       studNotChosen <- which(student == 0)
       n <- length(studNotChosen)
       if (n == 0) {return(list())}
-      else {
+      if (n==1) {return(as.list(c(studNotChosen)))}
       recom <- sample(studNotChosen,prob=rep(1,n))[1:(n/2)]
-      return(as.list(recom)) }
+      return(as.list(recom)) 
     }'''
     dataGen='''data1 <- data.matrix(data1)
     data1 <- data1[,2:4]
