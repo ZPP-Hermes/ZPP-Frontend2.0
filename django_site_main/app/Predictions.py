@@ -21,7 +21,7 @@ def prepData():
 conn = pyRserve.connect()
 conn.r.data1 = prepData()
 conn.r(Rscripts.Rscript.dataGen)
-conn.r(Rscripts.Rscript.arules)
+# conn.r(Rscripts.Rscript.arules)
 conn.r(Rscripts.Rscript.easiestWay)
 conn.r(Rscripts.Rscript.knn)
 conn.r(Rscripts.Rscript.random)

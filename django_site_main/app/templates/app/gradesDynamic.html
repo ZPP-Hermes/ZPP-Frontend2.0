@@ -1,124 +1,97 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title }}</title>
-    {% load staticfiles %}
-    <link rel="stylesheet" type="text/css" href="{% static 'app/content/bootstrap.min.css' %}"/>
-    <link rel="stylesheet" type="text/css" href="{% static 'app/content/site.css' %}"/>
-    <link rel="stylesheet" type="text/css" href="{% static 'app/scripts/jquery-ui-1.11.4/jquery-ui.min.css' %}"/>
-    <script src="{% static 'app/scripts/modernizr-2.6.2.js' %}"></script>
-    <!--<script src="{% static 'app/scripts/jquery-1.10.2.js' %}"></script>-->
-    <!--<script src="{% static 'app/scripts/bootstrap.js' %}"></script>-->
-    <!--<script src="{% static 'app/scripts/respond.js' %}"></script>-->
-    <!--<script src="http://malsup.github.com/jquery.form.js"></script>-->
-    <script src="{% static 'app/scripts/jquery-2.1.4.min.js' %}"></script>
-    <script src="{% static 'app/scripts/jquery-ui-1.11.4/jquery-ui.min.js' %}"></script>
-</head>
-
-<body>
-<div class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a href="{% url 'app:home' %}" class="navbar-brand">ZPP Hermes</a>
-        </div>
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li><a href="{% url 'app:home' %}">Home</a></li>
-                <li><a href="{% url 'app:edit_marks' %}">Edytuj oceny</a></li>
-            </ul>
-            {% include 'app/loginpartial.html' %}
-        </div>
-    </div>
-</div>
-
-<div class="container body-content">
-
+{% extends "app/layout.html" %}
+{% load static %}
+{%block gradesDynamic%}active{%endblock%}
+{% block content %}
+<div class="clearfix">
     <style type="text/css">
         #add-form {
-        width:35px; height:35px;
-        background:url({% static 'app/media/img-add.jpeg' %});
-        margin-top: 15pxl; margin-bottom: 15px;
-        cursor: pointer;
+            width:35px; height:35px;
+            background:url({% static 'app/media/img-add.png' %});
+            margin-top: 15pxl; margin-bottom: 15px;
+            cursor: pointer;
         }
 
         #grades-form p {
-        position: relative;
-        width: 370px;
-        margin-top: 20px;
+            position: relative;
+            width: 400px;
+            margin-top: 20px;
         }
 
         .course-display {
-        width: 300px !important;
+            width: 300px !important;
         }
 
 
         .course-display, .mark-select {
-        position: absolute;
-        right: 0px;
+            position: absolute;
+            right: 0px;
         }
         .mark-select {
-        display: none;
+            display: none;
         }
 
 
         .ui-state-focus {
-        background: none !important;
-        font-weight: normal !important;
-        color: grey !important;
+            background: none !important;
+            font-weight: normal !important;
+            color: grey !important;
         }
         .ui-state-focus a,
         .ui-state-focus a:hover,
         .ui-state-focus a:link,
         .ui-state-focus a:visited {
         color: #c77405;
-        text-decoration: none;
+            text-decoration: none;
         }
         .ui-state-focus .ui-icon {
-        background-image: url("images/ui-icons_ef8c08_256x240.png");
+            background-image: url("images/ui-icons_ef8c08_256x240.png");
         }
 
 
         #tile-template {
-        position: absolute;
-        right: 0px;
+            position: absolute;
+            right: 0px;
         }
         .ui-menu-item {
-        font-size: 14px !important;
+            font-size: 14px !important;
         }
         .ui-menu-icons .ui-menu-item {
-        padding-left: 2em;
+            padding-left: 2em;
         }
 
         ul.errorlist li {
-        color: red !important;
+            color: red !important;
         }
 
 
         .tile {
-        background: white;
-        margin-left: 5px;
-        margin-right: 5px;
-        width: 27px;
-        height: 27px;
-        display: inline-block !important;
-        border:2px solid #248F24;
-        cursor: pointer;
-        text-align: center;
-        padding: 0px;
-        padding-top: 3px;
-        font-size: 85%;
+            background: white;
+            margin-left: 5px;
+            margin-right: 5px;
+            width: 27px;
+            height: 27px;
+            display: inline-block !important;
+            border:2px solid #248F24;
+            cursor: pointer;
+            text-align: center;
+            padding: 0px;
+            padding-top: 3px;
+            font-size: 85%;
         }
         .tile:hover {
-        background: #AAE2AA;
-        <!--border:2px solid black;-->
+            background: #AAE2AA;
+            <!--border:2px solid black;-->
         }
+
+        #alg-form {
+            border: 1px solid black;
+            position: absolute;
+            padding: 10px;
+        }
+        #grades-form {
+            margin-left: 450px;
+        }
+
 
     </style>
 
@@ -126,6 +99,22 @@
     var form_count = 1
 
     $(document).ready(function(){
+
+        $("#grades-form").submit(function(e){
+            checked_sub=[]
+            checked_sem=[]
+            $("#id_form-0-algorithmSub").find("input:checked").each(function(){checked_sub.push(parseInt($(this).val()))})
+            $("#id_form-0-algorithmSem").find("input:checked").each(function(){checked_sem.push(parseInt($(this).val()))})
+
+
+            cur_action = $(this).attr("action")
+            selected_subject = $("#id_markSubject").val()
+
+            new_action = cur_action + "?algorithmSub=" + checked_sub + "&algorithmSem=" + checked_sem + "&selectedSub=" + selected_subject
+            $(this).attr("action", new_action)
+        })
+
+
         function registerFunctions() {
             $(".course-display").autocomplete({
                 source: "{% url 'app:gradesFilter' %}",
@@ -148,12 +137,31 @@
             courses_to_hide = $(".course-input")
             for (i = 0; i < courses_to_hide.length; i++) {
                 $(courses_to_hide[i].parentNode).css("display", "none")
+                $($(courses_to_hide[i].parentElement).prev("ul.errorlist")).css("display", "none")
             }
         }
 
         clean_tile_copy = $($("#tile-template")[0]).clone()[0]
         $(clean_tile_copy).css("display", "inline-block")
-        $($(".mark-select")[0].parentElement)[0].appendChild($(clean_tile_copy).clone()[0])
+
+        mark_select = $(".mark-select")
+        if (mark_select.length > 1) {
+            for (i = 0; i < mark_select.length; i++) {
+                $(mark_select[i].parentElement)[0].appendChild($(clean_tile_copy).clone()[0])
+                $("<hr>").insertAfter($(mark_select[i].parentElement))
+                $("<hr>").insertAfter($(mark_select[i].parentElement))
+
+                if ($(mark_select[i]).val() != "") {
+                    value = $(mark_select[i]).val()
+                    if (value != null)
+                        $($($(mark_select[i].parentElement)[0]).find(".tile-"+value)).css("background", "#AAE2AA")
+                }
+            }
+        } else {
+            $(mark_select[0].parentElement)[0].appendChild($(clean_tile_copy).clone()[0])
+            $("<hr>").insertBefore("#add-form")
+            $("<hr>").insertBefore("#add-form")
+        }
 
         registerFunctions()
 
@@ -170,9 +178,6 @@
             last_input = inputs_list[inputs_list.length - 1]
             last_index = parseInt(last_input.id.match(/\d+/)[0])
             new_index = last_index + 1
-
-            $("<hr>").insertBefore("#add-form")
-            $("<hr>").insertBefore("#add-form")
 
             new_input = $($(clean_inp_copy).clone()[0])
             id = new_input.find("input")[0].id.replace(/\d+/, new_index)
@@ -195,6 +200,9 @@
             new_select.find("select")[0].name=name
             new_select.insertBefore("#add-form")
 
+            $("<hr>").insertBefore("#add-form")
+            $("<hr>").insertBefore("#add-form")
+
             registerFunctions()
         });
     });
@@ -207,6 +215,7 @@
     <h3 style="margin-bottom: 20px;">{{ message }}</h3>
 
     <div id="tile-template" style="display: none;">
+        <div class="tile tile-0">B</div>
         <div class="tile tile-4">2</div>
         <div class="tile tile-6">3</div>
         <div class="tile tile-7">3+</div>
@@ -216,6 +225,48 @@
         <div class="tile tile-11">5!</div>
     </div>
 
+    <form id="alg-form">
+
+        <p>
+            <label for="id_form-0-algorithmSub_0">Wybierz algorytm predykcji przedmiotow:</label> <ul id="id_form-0-algorithmSub">
+            <li><label for="id_form-0-algorithmSub_0"><input id="id_form-0-algorithmSub_0" name="form-0-algorithmSub" type="checkbox" value="1" /> strategia wykorzystujaca algorytm regulowy</label></li>
+            <li><label for="id_form-0-algorithmSub_1"><input id="id_form-0-algorithmSub_1" name="form-0-algorithmSub" type="checkbox" value="2" /> lista priorytetowa najlatwiejszych przedmiotow</label></li>
+            <li><label for="id_form-0-algorithmSub_2"><input id="id_form-0-algorithmSub_2" name="form-0-algorithmSub" type="checkbox" value="3" /> dobierz w sposob losowy</label></li>
+            <li><label for="id_form-0-algorithmSub_3"><input id="id_form-0-algorithmSub_3" name="form-0-algorithmSub" type="checkbox" value="4" /> strategia najblizszych sasiadow</label></li>
+            </ul></p>
+            <p><label for="id_form-0-algorithmSem_0">Wybierz algorytm predykcji seminariow:</label> <ul id="id_form-0-algorithmSem">
+            <li><label for="id_form-0-algorithmSem_0"><input id="id_form-0-algorithmSem_0" name="form-0-algorithmSem" type="checkbox" value="1" /> strategia wykorzystujaca algorytm lasow losowych</label></li>
+            <li><label for="id_form-0-algorithmSem_1"><input id="id_form-0-algorithmSem_1" name="form-0-algorithmSem" type="checkbox" value="2" /> strategia najblizszych sasiadow</label></li>
+            </ul>
+        </p>
+        <p>
+            <label for="id_markSubject">Wybierz przedmiot do predykcji oceny:</label><br/>
+            <select id="id_markSubject" name="markSubject">
+                <option value="31">Zaawansowane systemy operacyjne</option>
+                <option value="32">Programowanie mikrokontrolerow</option>
+                <option value="33">Kompresja danych</option>
+                <option value="34">Przetwarzanie duzych danych</option>
+                <option value="35">Programowanie w logice</option>
+                <option value="36">Wstęp do biologii obliczeniowej</option>
+                <option value="37">Zaawansowane bazy danych</option>
+                <option value="38">Systemy uczące się</option>
+                <option value="39">Sztuczna inteligencja i systemy doradcze</option>
+                <option value="40">Data mining</option>
+                <option value="41">Algorytmika</option>
+                <option value="42">Algorytmy tekstowe</option>
+                <option value="43">Weryfikacja wspomagana komputerowo</option>
+                <option value="44">Wnioskowanie w serwisach i systemach informatycznych</option>
+                <option value="45">Teoria informacji</option>
+                <option value="46">Kryptografia</option>
+                <option value="47">Matematyka obliczeniowa 2</option>
+                <option value="48">Statystyka 2</option>
+                <option value="49">Rachunek prawdopodobienstwa 2</option>
+                <option value="50">Optymalizacja 1</option>
+            </select>
+        </p>
+
+    </form>
+
     <form id="grades-form" action="{% url 'app:gradesDynamic' %}" method="POST">
         {% csrf_token %}
 
@@ -224,15 +275,6 @@
         <div id="add-form"></div>
         <input type="submit" value="Wyślij"/>
     </form>
-
-    <hr/>
-    <footer>
-        <p>&copy; {{ year }} - ZPP</p>
-    </footer>
 </div>
 
-{% block scripts %}{% endblock %}
-
-<script src="{% static 'app/scripts/WearProtection.js' %}"></script>
-</body>
-</html>
+{% endblock %}

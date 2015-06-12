@@ -27,22 +27,22 @@ class HorizontalRadioRenderer(forms.RadioSelect.renderer):
 
 
 class MarkForm(ModelForm):
-    _algorithmSub = [(1, 'strategia wykorzystujaca algorytm regulowy'),
-                     (2, 'lista priorytetowa najlatwiejszych przedmiotow'),
-                     (3, 'dobierz w sposob losowy'), (4, 'strategia najblizszych sasiadow')]
-    _algorithmSem = [(1, 'strategia wykorzystujaca algorytm lasow losowych'), (2, 'strategia najblizszych sasiadow')]
-
-    algorithmSub = forms.MultipleChoiceField(required=False,
-                                             widget=forms.CheckboxSelectMultiple, choices=_algorithmSub,
-                                             label="Wybierz algorytm predykcji przedmiotow")
-    algorithmSem = forms.MultipleChoiceField(required=False,
-                                             widget=forms.CheckboxSelectMultiple, choices=_algorithmSem,
-                                             label="Wybierz algorytm predykcji seminariow")
+    # _algorithmSub = [(1, 'strategia wykorzystujaca algorytm regulowy'),
+    #                  (2, 'lista priorytetowa najlatwiejszych przedmiotow'),
+    #                  (3, 'dobierz w sposob losowy'), (4, 'strategia najblizszych sasiadow')]
+    # _algorithmSem = [(1, 'strategia wykorzystujaca algorytm lasow losowych'), (2, 'strategia najblizszych sasiadow')]
+    #
+    # algorithmSub = forms.MultipleChoiceField(required=False,
+    #                                          widget=forms.CheckboxSelectMultiple, choices=_algorithmSub,
+    #                                          label="Wybierz algorytm predykcji przedmiotow")
+    # algorithmSem = forms.MultipleChoiceField(required=False,
+    #                                          widget=forms.CheckboxSelectMultiple, choices=_algorithmSem,
+    #                                          label="Wybierz algorytm predykcji seminariow")
     course_display = forms.CharField(max_length=100)
 
     class Meta:
         model = Mark
-        fields = ['algorithmSub', 'algorithmSem', 'course', 'course_display', 'mark']
+        fields = ['course', 'course_display', 'mark']
         widgets = {
             # 'course': forms.Input(attrs={'class': 'course-input', }),
             # 'course_display': forms.TextInput(attrs={'class': 'course-display', }),
@@ -57,6 +57,7 @@ class MarkForm(ModelForm):
 
         self.fields['course'].widget = TextInput(attrs={'class': 'course-input', })
         self.fields['mark'].label = "Ocena"
+        self.empty_permitted = False
 
 
 MarkFormSet = formset_factory(MarkForm)

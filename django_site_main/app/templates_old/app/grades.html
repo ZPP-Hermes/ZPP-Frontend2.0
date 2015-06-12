@@ -1,12 +1,11 @@
 {% extends "app/layout.html" %}
 {% load static %}
-{%block grades%}active{%endblock%}
+
 {% block content %}
 {% if success %}
 <h1>Wpisano do bazy</h1>
 {% endif %}
 
-<div class="clearfix">
 <style type="text/css">
     #add-form {
     width:35px; height:35px;
@@ -108,6 +107,5 @@
     <!--<div id="add-form"></div>-->
     <input type="submit" value="Wyślij"/>
 </form>
-    </div>
 
 {% endblock %}

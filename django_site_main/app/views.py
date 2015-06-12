@@ -38,7 +38,10 @@ def register(request):
             return redirect('app:home')
     else:
         form = UserCreationForm()
-    return render(request, 'app/register.html', {'form': form})
+    return render(request, 'app/register.html',
+                                        {
+                                            'form': form
+                                        })
 
 
 def home(request):
@@ -109,9 +112,13 @@ def grades(request):
             for i in range(50):
                 values.append(form.cleaned_data['subject' + str(i)])
             marks = map(int, values)
+            print "marks => " + str(marks)
             selectedAlg = map(int, form.cleaned_data['algorithmSub'])
+            print "selectedAlg => " + str(selectedAlg)
             selectedAlgSem = map(int, form.cleaned_data['algorithmSem'])
+            print "selectedAlgSem => " + str(selectedAlgSem)
             selectedSub = int(form.cleaned_data['markSubject'])
+            print "selectedSub => " + str(selectedSub)
             #listy na rezultaty zapytan predykcji przedmiotow wg poszczegolnych
             #algorytmow
             recommendSubjects1 = []
@@ -248,32 +255,55 @@ def gradesDynamic(request):
     assert isinstance(request, HttpRequest)
 
     if request.method == 'POST':
+        sub = request.GET.get('algorithmSub', "").split(",")
+        print "sub => ", sub
+        if sub != [''] and sub != []:
+            sub = map(int, sub)
+        else:
+            sub = []
+        sem = request.GET.get('algorithmSem', "").split(",")
+        print "sem => ", sem
+        if sem != [''] and sem != []:
+            sem = map(int, sem)
+        else:
+            sem = []
+
+        selectedSub = int(request.GET.get("selectedSub", ""))
         formset = MarkFormSet(request.POST, request.FILES)
         if formset.is_valid():
             values = []
-            subjects = Course.objects.all()[0:50]
+            subjects = Course.objects.all()[:50]
 
-            selectedAlg = []
-            selectedAlgSem = []
+            # selectedAlg = []
+            # selectedAlgSem = []
 
-            for form in formset.forms:
-                print '========================================'
-                print str(form.cleaned_data)
-                if 'algorithmSub' in form.cleaned_data:
-                    selectedAlg = form.cleaned_data['algorithmSub']
-                if 'algorithmSem' in form.cleaned_data:
-                    selectedAlgSem = form.cleaned_data['algorithmSem']
-                for sbj in subjects:
+            # print '========================================'
+            # print str(form.cleaned_data)
+            # if 'algorithmSub' in form.cleaned_data:
+            #     selectedAlg = form.cleaned_data['algorithmSub']
+            # if 'algorithmSem' in form.cleaned_data:
+            #     selectedAlgSem = form.cleaned_data['algorithmSem']
+            for sbj in subjects:
+                for form in formset.forms:
                     if sbj.id == int(form.cleaned_data['course'].id):
                         values.append(form.cleaned_data['mark'])
+                else:
+                    if sbj.id <= 30:
+                        values.append(6)
                     else:
                         values.append(0)
-                        #values.append(form.cleaned_data['subject' + str(i)])
-                        # pass
+                    #values.append(form.cleaned_data['subject' + str(i)])
+                    # pass
 
-            marks = map(int, values)
-            selectedAlg = map(int, selectedAlg)
-            selectedAlgSem = map(int, selectedAlgSem)
+            marks= map(int, values)[:50]
+            selectedAlg = sub
+            selectedAlgSem = sem
+
+            print "marks => " + str(marks)
+            print "selectedAlg => " + str(selectedAlg)
+            print "selectedAlgSem => " + str(selectedAlgSem)
+            print "selectedSub => " + str(selectedSub)
+
             #listy na rezultaty zapytan predykcji przedmiotow wg poszczegolnych
             #algorytmow
             recommendSubjects1 = []
@@ -297,26 +327,28 @@ def gradesDynamic(request):
                 for i in range(0, len(recommendSubjects1)):
                     id_course = recommendSubjects1[i]
                     course = Course.objects.get(pk=id_course)
-                    recSubNames1.append((course.name, course.url))
+                    (avg,chance,part) = courseStat(course)
+                    recSubNames1.append((course.name, course.url, avg, chance, part,course.name+"alg1",course.url+"alg1"))
             else:
                 algorytmy.append(None)
             if (2 in selectedAlg):
                 algorytmy.append(2)
-                recommendSubjects2 = Predictions.getRecomSubStrategy2(marks)
+                recommendSubjects2 = Predictions.getRecomSubStrategy2(marks)[:5]
                 for i in range(0, len(recommendSubjects2)):
                     id_course = recommendSubjects2[i]
                     course = Course.objects.get(pk=id_course)
-                    link = course.url
-                    recSubNames2.append((course.name, course.url))
+                    (avg,chance,part) = courseStat(course)
+                    recSubNames2.append((course.name, course.url,avg, chance, part,course.name+"alg2",course.url+"alg2"))
             else:
                 algorytmy.append(None)
             if (3 in selectedAlg):
                 algorytmy.append(3)
-                recommendSubjects3 = Predictions.getRecomSubStrategy3(marks)
+                recommendSubjects3 = Predictions.getRecomSubStrategy3(marks)[:5]
                 for i in range(0, len(recommendSubjects3)):
                     id_course = recommendSubjects3[i]
                     course = Course.objects.get(pk=id_course)
-                    recSubNames3.append((course.name, course.url))
+                    (avg,chance,part) = courseStat(course)
+                    recSubNames3.append((course.name, course.url,avg, chance, part,course.name+"alg3",course.url+"alg3"))
             else:
                 algorytmy.append(None)
             if (4 in selectedAlg):
@@ -325,21 +357,25 @@ def gradesDynamic(request):
                 for i in range(0, len(recommendSubjects4)):
                     id_course = recommendSubjects4[i]
                     course = Course.objects.get(pk=id_course)
-                    recSubNames4.append((course.name, course.url))
+                    (avg,chance,part) = courseStat(course)
+                    recSubNames4.append((course.name, course.url,avg, chance, part,course.name+"alg4",course.url+"alg4"))
             else:
                 algorytmy.append(None)
             if (1 in selectedAlgSem):
-                recommendation = Predictions.getRecomSemStrategy1(marks) + 51
+                recommendation = Predictions.getRecomSemStrategy1(marks)
                 seminar = Course.objects.get(pk=recommendation)
-                recommendSem.append((seminar.name, seminar.url))
+                (avg,chance,part) = courseStat(seminar)
+                recommendSem.append((seminar.name, seminar.url,avg,chance,part,course.name+"salg1",course.url+"salg1"))
             else:
                 recommendSem.append(None)
             if (2 in selectedAlgSem):
-                recommendation = Predictions.getRecomSemStrategy2(marks) + 51
+                recommendation = Predictions.getRecomSemStrategy2(marks)
                 seminar = Course.objects.get(pk=recommendation)
-                recommendSem.append((seminar.name, seminar.url))
+                (avg,chance,part) = courseStat(seminar)
+                recommendSem.append((seminar.name, seminar.url,avg,chance,part,course.name+"salg2",course.url+"salg2"))
             else:
                 recommendSem.append(None)
+            predMark = Predictions.predictMark(marks, selectedSub)/2
             return render(
                 request,
                 'app/gradesResult.html',
@@ -352,6 +388,7 @@ def gradesDynamic(request):
                                                     'recomSub4': recSubNames4,
                                                     'sem': czyPredSem,
                                                     'recomSem': recommendSem,
+                                                    'predMark': predMark,
                                                 })
             )
         return render(
@@ -380,7 +417,7 @@ def gradesDynamic(request):
     )
 
 
-@login_required()
+# @login_required()
 def gradesFilter(request):
     success = False
     assert isinstance(request, HttpRequest)

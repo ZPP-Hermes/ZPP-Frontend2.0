@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    {% load staticfiles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'app/content/bootstrap.min.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'app/content/site.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'app/scripts/jquery-ui-1.11.4/jquery-ui.min.css' %}"/>
+    <script src="{% static 'app/scripts/modernizr-2.6.2.js' %}"></script>
+    <!--<script src="{% static 'app/scripts/jquery-1.10.2.js' %}"></script>-->
+    <!--<script src="{% static 'app/scripts/bootstrap.js' %}"></script>-->
+    <!--<script src="{% static 'app/scripts/respond.js' %}"></script>-->
+    <!--<script src="http://malsup.github.com/jquery.form.js"></script>-->
+    <script src="{% static 'app/scripts/jquery-2.1.4.min.js' %}"></script>
+    <script src="{% static 'app/scripts/jquery-ui-1.11.4/jquery-ui.min.js' %}"></script>
+</head>
+
+<body>
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a href="{% url 'app:home' %}" class="navbar-brand">ZPP Hermes</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="{% url 'app:home' %}">Home</a></li>
+                <li><a href="{% url 'app:edit_marks' %}">Edytuj oceny</a></li>
+            </ul>
+            {% include 'app/loginpartial.html' %}
+        </div>
+    </div>
+</div>
+
+<div class="container body-content">
+
+    <style type="text/css">
+        #add-form {
+        width:35px; height:35px;
+        background:url({% static 'app/media/img-add.jpeg' %});
+        margin-top: 15pxl; margin-bottom: 15px;
+        cursor: pointer;
+        }
+
+        #grades-form p {
+        position: relative;
+        width: 370px;
+        margin-top: 20px;
+        }
+
+        .course-display {
+        width: 300px !important;
+        }
+
+
+        .course-display, .mark-select {
+        position: absolute;
+        right: 0px;
+        }
+        .mark-select {
+        display: none;
+        }
+
+
+        .ui-state-focus {
+        background: none !important;
+        font-weight: normal !important;
+        color: grey !important;
+        }
+        .ui-state-focus a,
+        .ui-state-focus a:hover,
+        .ui-state-focus a:link,
+        .ui-state-focus a:visited {
+        color: #c77405;
+        text-decoration: none;
+        }
+        .ui-state-focus .ui-icon {
+        background-image: url("images/ui-icons_ef8c08_256x240.png");
+        }
+
+
+        #tile-template {
+        position: absolute;
+        right: 0px;
+        }
+        .ui-menu-item {
+        font-size: 14px !important;
+        }
+        .ui-menu-icons .ui-menu-item {
+        padding-left: 2em;
+        }
+
+        ul.errorlist li {
+        color: red !important;
+        }
+
+
+        .tile {
+        background: white;
+        margin-left: 5px;
+        margin-right: 5px;
+        width: 27px;
+        height: 27px;
+        display: inline-block !important;
+        border:2px solid #248F24;
+        cursor: pointer;
+        text-align: center;
+        padding: 0px;
+        padding-top: 3px;
+        font-size: 85%;
+        }
+        .tile:hover {
+        background: #AAE2AA;
+        <!--border:2px solid black;-->
+        }
+
+    </style>
+
+    <script type="text/javascript">
+    var form_count = 1
+
+    $(document).ready(function(){
+        function registerFunctions() {
+            $(".course-display").autocomplete({
+                source: "{% url 'app:gradesFilter' %}",
+                minLength: 2,
+                select:function(event, ui) {
+                    course_id = "#" + this.id.replace("_display", "")
+                    $(course_id).val(ui.item.id)
+                }
+            });
+
+            $(".tile").click(function() {
+                $(this.parentNode.childNodes).css("background", "")
+                $(this).css("background", "#AAE2AA")
+
+                selected_mark = parseInt(this.className.match(/\d+/)[0])
+                mark_form = $(this.parentNode.parentNode).find(".mark-select")[0]
+                $(mark_form).val(selected_mark)
+            });
+
+            courses_to_hide = $(".course-input")
+            for (i = 0; i < courses_to_hide.length; i++) {
+                $(courses_to_hide[i].parentNode).css("display", "none")
+            }
+        }
+
+        clean_tile_copy = $($("#tile-template")[0]).clone()[0]
+        $(clean_tile_copy).css("display", "inline-block")
+        $($(".mark-select")[0].parentElement)[0].appendChild($(clean_tile_copy).clone()[0])
+
+        registerFunctions()
+
+        clean_sel_copy = $($(".mark-select")[0].parentElement).clone()[0]
+        clean_inp_copy = $($(".course-input")[0].parentElement).clone()[0]
+        clean_dsp_copy = $($(".course-display")[0].parentElement).clone()[0]
+
+
+        $("#add-form").click(function(){
+            form_count++
+            $("#id_form-TOTAL_FORMS").val(form_count)
+
+            inputs_list = $(".course-input")
+            last_input = inputs_list[inputs_list.length - 1]
+            last_index = parseInt(last_input.id.match(/\d+/)[0])
+            new_index = last_index + 1
+
+            $("<hr>").insertBefore("#add-form")
+            $("<hr>").insertBefore("#add-form")
+
+            new_input = $($(clean_inp_copy).clone()[0])
+            id = new_input.find("input")[0].id.replace(/\d+/, new_index)
+            name = new_input.find("input")[0].name.replace(/\d+/, new_index)
+            new_input.find("input")[0].id = id
+            new_input.find("input")[0].name = name
+            new_input.insertBefore("#add-form")
+
+            new_display = $($(clean_dsp_copy).clone()[0])
+            id = new_display.find("input")[0].id.replace(/\d+/, new_index)
+            name = new_display.find("input")[0].name.replace(/\d+/, new_index)
+            new_display.find("input")[0].id = id
+            new_display.find("input")[0].name = name
+            new_display.insertBefore("#add-form")
+
+            new_select = $($(clean_sel_copy).clone()[0])
+            id = new_select.find("select")[0].id.replace(/\d+/, new_index)
+            name = new_select.find("select")[0].name.replace(/\d+/, new_index)
+            new_select.find("select")[0].id = id
+            new_select.find("select")[0].name=name
+            new_select.insertBefore("#add-form")
+
+            registerFunctions()
+        });
+    });
+
+
+    </script>
+
+    <h2>{{ title }}.</h2>
+
+    <h3 style="margin-bottom: 20px;">{{ message }}</h3>
+
+    <div id="tile-template" style="display: none;">
+        <div class="tile tile-4">2</div>
+        <div class="tile tile-6">3</div>
+        <div class="tile tile-7">3+</div>
+        <div class="tile tile-8">4</div>
+        <div class="tile tile-9">4+</div>
+        <div class="tile tile-10">5</div>
+        <div class="tile tile-11">5!</div>
+    </div>
+
+    <form id="grades-form" action="{% url 'app:gradesDynamic' %}" method="POST">
+        {% csrf_token %}
+
+        {{ formset.as_p }}
+
+        <div id="add-form"></div>
+        <input type="submit" value="Wyślij"/>
+    </form>
+
+    <hr/>
+    <footer>
+        <p>&copy; {{ year }} - ZPP</p>
+    </footer>
+</div>
+
+{% block scripts %}{% endblock %}
+
+<script src="{% static 'app/scripts/WearProtection.js' %}"></script>
+</body>
+</html>
