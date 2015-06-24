@@ -59,7 +59,7 @@ class SavedMark(models.Model):
         (10, '5'),
         (11, '5!')
     )
-    user = models.ForeignKey(User, blank=False, null=False)
+    user = models.ForeignKey(User, blank=False, null=False, db_column='SUser')
     course = models.ForeignKey('Course', blank=False, null=False)
     mark = models.IntegerField(max_length=250, choices=MARKS)
 
