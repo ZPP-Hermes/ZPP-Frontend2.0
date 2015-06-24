@@ -109,8 +109,9 @@
 
             cur_action = $(this).attr("action")
             selected_subject = $("#id_markSubject").val()
+            selected_seminar = $("#id_semSub").val()
 
-            new_action = cur_action + "?algorithmSub=" + checked_sub + "&algorithmSem=" + checked_sem + "&selectedSub=" + selected_subject
+            new_action = cur_action + "?algorithmSub=" + checked_sub + "&algorithmSem=" + checked_sem + "&selectedSub=" + selected_subject + "&selectedSem=" + selected_seminar
             $(this).attr("action", new_action)
         })
 
@@ -210,8 +211,6 @@
 
     </script>
 
-    <h2>{{ title }}.</h2>
-
     <h3 style="margin-bottom: 20px;">{{ message }}</h3>
 
     <div id="tile-template" style="display: none;">
@@ -234,6 +233,21 @@
             <li><label for="id_form-0-algorithmSub_2"><input id="id_form-0-algorithmSub_2" name="form-0-algorithmSub" type="checkbox" value="3" /> dobierz w sposob losowy</label></li>
             <li><label for="id_form-0-algorithmSub_3"><input id="id_form-0-algorithmSub_3" name="form-0-algorithmSub" type="checkbox" value="4" /> strategia najblizszych sasiadow</label></li>
             </ul></p>
+        <p>
+            <label for="id_semSub">Wybierz seminarium do predyckcji przedmiotu</label><br/>
+            <select id="id_semSub" name="semSub">
+                <option value="51">Systemy rozproszone</option>
+                <option value="52">Języki programowania</option>
+                <option value="53">Zagadnienia programowania obiektowego</option>
+                <option value="54">Wybrane aspekty inżynierii oprogramowania</option>
+                <option value="55">Analiza, wizualizacja i optymalizacja oprogramowania</option>
+                <option value="56">Innowacyjne zastosowania informatyki</option>
+                <option value="57">Molekularna biologia obliczeniowa</option>
+                <option value="58">Algorytmika</option>
+                <option value="59">Metody numeryczne</option>
+                <option value="60">Matematyka w informatyce</option>
+            </select>
+        </p>
             <p><label for="id_form-0-algorithmSem_0">Wybierz algorytm predykcji seminariow:</label> <ul id="id_form-0-algorithmSem">
             <li><label for="id_form-0-algorithmSem_0"><input id="id_form-0-algorithmSem_0" name="form-0-algorithmSem" type="checkbox" value="1" /> strategia wykorzystujaca algorytm lasow losowych</label></li>
             <li><label for="id_form-0-algorithmSem_1"><input id="id_form-0-algorithmSem_1" name="form-0-algorithmSem" type="checkbox" value="2" /> strategia najblizszych sasiadow</label></li>

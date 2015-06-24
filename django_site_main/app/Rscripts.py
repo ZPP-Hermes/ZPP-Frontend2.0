@@ -98,9 +98,12 @@ class Rscript():
       recom <- c()
       for (i in 1:length(bestNb)) {
         nbSub <- which(data[bestNb[i],] > 0)
-        recom <- unique(c(recom, nbSub[nbSub %in% studNotChosen]))
+        recom <- c(recom, nbSub[nbSub %in% studNotChosen])
       }
-      return(as.list(recom))
+      sortRecom <- sort(table(recom),decreasing=TRUE)
+      len <- min(5,length(sortRecom))
+      sub <- as.integer(names(sortRecom[1:len]))
+      return(as.list(sub))
     }'''
     random='''random <- function(student) {
       studNotChosen <- which(student == 0)
@@ -163,4 +166,23 @@ class Rscript():
       {
         return(sample(4:11,1,prob=c(5,3,2,1,1,1,1,1)))
       }
+    }'''
+    subforSemKnn = '''recomNearestSubforSem <- function(k, student, sem) {
+      dataSem <- data[data[,51]==(sem-50),]
+      student <- unlist(student)
+      n <- dim(dataSem)[1]
+      A <- matrix(0,n,2)
+      A[,1] <- unlist(lapply(1:n, function(i) {dist(student,dataSem[i,])}))
+      A[,2] <- c(1:n)
+      bestNb <- A[order(A[,1])[1:k],2]
+      studNotChosen <- which(student == 0)
+      recom <- c()
+      for (i in 1:length(bestNb)) {
+        nbSub <- which(data[bestNb[i],] > 0)
+        recom <- c(recom, nbSub[nbSub %in% studNotChosen])
+      }
+      sortRecom <- sort(table(recom),decreasing=TRUE)
+      len <- min(5,length(sortRecom))
+      sub <- as.integer(names(sortRecom[1:len]))
+      return(as.list(sub))
     }'''

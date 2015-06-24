@@ -80,6 +80,24 @@
 </ol>
 {% endif %}
 
+<h2> Przedmioty rekomendowane dla studenta i dla wybraengo seminarium </h2>
+<h3> Lista proponowanych przedmiotów: </h3>
+<ol>
+    {% for name,url,avg,chance,proc,id_n,id_u in recomSub5 %}
+    <li>
+    <h4> {{ name }} <font size="3"> &nbsp;&nbsp; <a href="javascript:pokazUkryj('{{ id_n }}','{{id_u}}')" id="{{id_u}}">info</a> </font> </h4>
+    <div id="{{ id_n }}" style="display:none">
+                <h5>
+                    <a href="https://usosweb.mimuw.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&prz_kod={{ url }}">
+                        Strona przedmiotu </a></h5>
+                <h5>Średnia z ocen: {{avg}} </h5>
+                <h5>Procentowa zdawalność: {{chance}} % </h5>
+                <h5>Procent zapisanych studentów: {{proc}} % </h5>
+    </div>
+    </li>
+    {% endfor %}
+</ol>
+
 {% if sem %}
 <h2> Proponowane seminaria</h2>
 

@@ -269,6 +269,8 @@ def gradesDynamic(request):
             sem = []
 
         selectedSub = int(request.GET.get("selectedSub", ""))
+        selectedSem = int(request.GET.get("selectedSem", ""))
+        print "selected sem => " + str(selectedSem)
         formset = MarkFormSet(request.POST, request.FILES)
         if formset.is_valid():
             #defaultowe oceny: 3 z przedmiotu obowiazkowego i "brak" z przedmiotu obieralnego
@@ -306,6 +308,7 @@ def gradesDynamic(request):
             recommendSubjects2 = []
             recommendSubjects3 = []
             recommendSubjects4 = []
+            recommendSubjects5 = []
             #lista przekazujaca do szablonu rekomendacje seminariow (jesli jakies byly)
             recommendSem = []
             #lista na pary nazwa-url wybranych przedmiotow
@@ -313,6 +316,7 @@ def gradesDynamic(request):
             recSubNames2 = []
             recSubNames3 = []
             recSubNames4 = []
+            recSubNames5 = []
             #wybrane algorytmy predykcji przedmiotow - info dla szablonu
             algorytmy = []
             #czy student chce predykcji seminariow - info dla szablonu
@@ -372,6 +376,12 @@ def gradesDynamic(request):
             else:
                 recommendSem.append(None)
             predMark = Predictions.predictMark(marks, selectedSub)/2
+            recommendSubjects5 = Predictions.predictSubforSem(marks, selectedSem)
+            for i in range(0, len(recommendSubjects5)):
+                id_course = recommendSubjects5[i]
+                course = Course.objects.get(pk=id_course)
+                (avg,chance,part) = courseStat(course)
+                recSubNames5.append((course.name, course.url,avg, chance, part,course.name+"subSem",course.url+"subSem"))
             return render(
                 request,
                 'app/gradesResult.html',
@@ -382,6 +392,7 @@ def gradesDynamic(request):
                                                     'recomSub2': recSubNames2,
                                                     'recomSub3': recSubNames3,
                                                     'recomSub4': recSubNames4,
+                                                    'recomSub5': recSubNames5,
                                                     'sem': czyPredSem,
                                                     'recomSem': recommendSem,
                                                     'predMark': predMark,
