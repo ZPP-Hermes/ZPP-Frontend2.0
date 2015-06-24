@@ -271,12 +271,15 @@ def gradesDynamic(request):
         selectedSub = int(request.GET.get("selectedSub", ""))
         formset = MarkFormSet(request.POST, request.FILES)
         if formset.is_valid():
-            values = []
+            #defaultowe oceny: 3 z przedmiotu obowiazkowego i "brak" z przedmiotu obieralnego
+            marks = [6]*30
+            marks.extend([0]*20)
             subjects = Course.objects.all()[:50]
 
             # selectedAlg = []
             # selectedAlgSem = []
-
+            #print "subjects from db => " + str(len(Course.objects.all()))
+            #print "proper subjects => " + str(subjects)
             # print '========================================'
             # print str(form.cleaned_data)
             # if 'algorithmSub' in form.cleaned_data:
@@ -286,16 +289,9 @@ def gradesDynamic(request):
             for sbj in subjects:
                 for form in formset.forms:
                     if sbj.id == int(form.cleaned_data['course'].id):
-                        values.append(form.cleaned_data['mark'])
-                else:
-                    if sbj.id <= 30:
-                        values.append(6)
-                    else:
-                        values.append(0)
-                    #values.append(form.cleaned_data['subject' + str(i)])
-                    # pass
+                        marks[(sbj.id-1)] = int(form.cleaned_data['mark'])
 
-            marks= map(int, values)[:50]
+
             selectedAlg = sub
             selectedAlgSem = sem
 
