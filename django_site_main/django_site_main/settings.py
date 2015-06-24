@@ -34,7 +34,7 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'NAME': path.join(PROJECT_ROOT, 'testDB.sqlite3'),
+        'NAME': path.join(PROJECT_ROOT, 'testDBcopyfromjson.sqlite3'),
         'ENGINE': 'django.db.backends.sqlite3',  #'sql_server.pyodbc',
         'HOST': '',
         'USER': '',
