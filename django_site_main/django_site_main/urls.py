@@ -3,11 +3,12 @@ Definition of urls for django_site_main.
 """
 
 from django.conf.urls import patterns, url, include
-
+from django.conf.urls.static import static
 from django.contrib import admin
-
+import os
 admin.autodiscover()
 
+import settings
 urlpatterns = patterns('',
                        url(r'^', include('app.urls', namespace='app')),
 
@@ -58,4 +59,4 @@ urlpatterns = patterns('',
 
                        # Uncomment the next line to enable the admin:
                        url(r'^admin/', include(admin.site.urls)),
-)
+)+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
