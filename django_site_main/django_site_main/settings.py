@@ -14,7 +14,8 @@ else:
 TEMPLATE_DEBUG = DEBUG
 
 ALLOWED_HOSTS = (
-    'zpptestvm.cloudapp.net',
+    'hermesvm.cloudapp.net',
+   'localhost',
 )
 
 ADMINS = (
