@@ -60,6 +60,7 @@
     {% endfor %}
 </ol>
 {% endif %}
+
 {% if alg.3 %}
 <h2> Strategia najbliższych sasiadów </h2>
 <h3> Lista proponowanych przedmiotów: </h3>
@@ -80,6 +81,7 @@
 </ol>
 {% endif %}
 
+{% if isSelectedSem %}
 <h2> Przedmioty rekomendowane dla studenta i dla wybraengo seminarium </h2>
 <h3> Lista proponowanych przedmiotów: </h3>
 <ol>
@@ -97,6 +99,7 @@
     </li>
     {% endfor %}
 </ol>
+{% endif %}
 
 {% if sem %}
 <h2> Proponowane seminaria</h2>
@@ -133,8 +136,11 @@
 {% endif %}
 
 {% endif %}
-    <h3>Proponowana ocena z wybranego przedmiotu</h3>
+
+{% if isSelectedSub %}
+    <h3>Proponowana ocena z {{ predMarkSub }}</h3>
     <h4>{{ predMark }}</h4>
+{% endif %}
 
 
 

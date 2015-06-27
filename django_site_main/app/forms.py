@@ -99,6 +99,11 @@ class GradesForm(forms.Form):
                     (45,"Teoria informacji"), (46,"Kryptografia"),
                     (47,"Matematyka obliczeniowa 2"), (48,"Statystyka 2"),
                     (49,"Rachunek prawdopodobienstwa 2"), (50,"Optymalizacja 1")]
+        sems = [(51,"Systemy rozproszone"), (52,"Języki programowania"), (53,"Zagadnienia programowania obiektowego"),
+                (54,"Wybrane aspekty inżynierii oprogramowania"),
+                (55,"Analiza, wizualizacja i optymalizacja oprogramowania"), (56,"Innowacyjne zastosowania informatyki"),
+                (57,"Molekularna biologia obliczeniowa"), (58,"Algorytmika"),
+                (59,"Metody numeryczne"),(60,"Matematyka w informatyce")]
         super(GradesForm, self).__init__(*args, **kwargs)
         subjects = Course.objects.all()[0:50]
         i = 0
@@ -108,6 +113,8 @@ class GradesForm(forms.Form):
         self.fields['algorithmSub'] = forms.MultipleChoiceField(required=False,
                                                                 widget=forms.CheckboxSelectMultiple, choices=algsSub,
                                                                 label="Wybierz algorytm predykcji przedmiotow")
+        self.fields['semSubject'] = forms.ChoiceField(required=False,choices=sems,
+                                                                label="Wybierz seminarium do predykcji przedmiotow")
         self.fields['algorithmSem'] = forms.MultipleChoiceField(required=False,
                                                                 widget=forms.CheckboxSelectMultiple, choices=algsSem,
                                                                 label="Wybierz algorytm predykcji seminariow")

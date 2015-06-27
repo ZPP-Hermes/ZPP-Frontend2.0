@@ -270,6 +270,12 @@ def gradesDynamic(request):
 
         selectedSub = int(request.GET.get("selectedSub", ""))
         selectedSem = int(request.GET.get("selectedSem", ""))
+        isselectedSem = request.GET.get("semSubChecked", "")
+        isselectedSub = request.GET.get("markSubChecked","")
+        if isselectedSub != 'true':
+            isselectedSub = None
+        if isselectedSem != 'true':
+            isselectedSem = None
         print "selected sem => " + str(selectedSem)
         formset = MarkFormSet(request.POST, request.FILES)
         if formset.is_valid():
@@ -297,6 +303,7 @@ def gradesDynamic(request):
             selectedAlg = sub
             selectedAlgSem = sem
 
+            print "sem is sel => " + str(isselectedSem)
             print "marks => " + str(marks)
             print "selectedAlg => " + str(selectedAlg)
             print "selectedAlgSem => " + str(selectedAlgSem)
@@ -365,14 +372,14 @@ def gradesDynamic(request):
                 recommendation = Predictions.getRecomSemStrategy1(marks)
                 seminar = Course.objects.get(pk=recommendation)
                 (avg,chance,part) = courseStat(seminar)
-                recommendSem.append((seminar.name, seminar.url,avg,chance,part,course.name+"salg1",course.url+"salg1"))
+                recommendSem.append((seminar.name, seminar.url,avg,chance,part,seminar.name+"salg1",seminar.url+"salg1"))
             else:
                 recommendSem.append(None)
             if (2 in selectedAlgSem):
                 recommendation = Predictions.getRecomSemStrategy2(marks)
                 seminar = Course.objects.get(pk=recommendation)
                 (avg,chance,part) = courseStat(seminar)
-                recommendSem.append((seminar.name, seminar.url,avg,chance,part,course.name+"salg2",course.url+"salg2"))
+                recommendSem.append((seminar.name, seminar.url,avg,chance,part,seminar.name+"salg2",seminar.url+"salg2"))
             else:
                 recommendSem.append(None)
             predMark = Predictions.predictMark(marks, selectedSub)/2
@@ -394,8 +401,11 @@ def gradesDynamic(request):
                                                     'recomSub4': recSubNames4,
                                                     'recomSub5': recSubNames5,
                                                     'sem': czyPredSem,
+                                                    'isSelectedSem': isselectedSem,
+                                                    'isSelectedSub': isselectedSub,
                                                     'recomSem': recommendSem,
                                                     'predMark': predMark,
+                                                    'predMarkSub' : Course.objects.get(pk=selectedSub).name,
                                                 })
             )
         return render(

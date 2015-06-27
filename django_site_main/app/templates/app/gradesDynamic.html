@@ -110,8 +110,11 @@
             cur_action = $(this).attr("action")
             selected_subject = $("#id_markSubject").val()
             selected_seminar = $("#id_semSub").val()
+            is_selected_seminar = $("#id_semSubChecked").is(":checked")
+            is_selected_subject = $("#id_markSubjectChecked").is(":checked")
 
-            new_action = cur_action + "?algorithmSub=" + checked_sub + "&algorithmSem=" + checked_sem + "&selectedSub=" + selected_subject + "&selectedSem=" + selected_seminar
+            new_action = cur_action + "?algorithmSub=" + checked_sub + "&algorithmSem=" + checked_sem + "&selectedSub=" +
+            selected_subject + "&selectedSem=" + selected_seminar + "&semSubChecked=" + is_selected_seminar + "&markSubChecked=" + is_selected_subject
             $(this).attr("action", new_action)
         })
 
@@ -211,7 +214,7 @@
 
     </script>
 
-    <h3 style="margin-bottom: 20px;">{{ message }}</h3>
+
 
     <div id="tile-template" style="display: none;">
         <div class="tile tile-0">B</div>
@@ -227,14 +230,14 @@
     <form id="alg-form">
 
         <p>
-            <label for="id_form-0-algorithmSub_0">Wybierz algorytm predykcji przedmiotow:</label> <ul id="id_form-0-algorithmSub">
+            <label for="id_form-0-algorithmSub_0">Wybierz algorytm rekomendacji przedmiotow:</label> <ul id="id_form-0-algorithmSub">
             <li><label for="id_form-0-algorithmSub_0"><input id="id_form-0-algorithmSub_0" name="form-0-algorithmSub" type="checkbox" value="1" /> strategia wykorzystujaca algorytm regulowy</label></li>
             <li><label for="id_form-0-algorithmSub_1"><input id="id_form-0-algorithmSub_1" name="form-0-algorithmSub" type="checkbox" value="2" /> lista priorytetowa najlatwiejszych przedmiotow</label></li>
             <li><label for="id_form-0-algorithmSub_2"><input id="id_form-0-algorithmSub_2" name="form-0-algorithmSub" type="checkbox" value="3" /> dobierz w sposob losowy</label></li>
             <li><label for="id_form-0-algorithmSub_3"><input id="id_form-0-algorithmSub_3" name="form-0-algorithmSub" type="checkbox" value="4" /> strategia najblizszych sasiadow</label></li>
             </ul></p>
         <p>
-            <label for="id_semSub">Wybierz seminarium do predyckcji przedmiotu</label><br/>
+            <label for="id_semSub"><input id="id_semSubChecked" name="semSubChecked" type="checkbox" value="1" />Wybierz seminarium do rekomendacji przedmiotow</label></br>
             <select id="id_semSub" name="semSub">
                 <option value="51">Systemy rozproszone</option>
                 <option value="52">Języki programowania</option>
@@ -248,13 +251,13 @@
                 <option value="60">Matematyka w informatyce</option>
             </select>
         </p>
-            <p><label for="id_form-0-algorithmSem_0">Wybierz algorytm predykcji seminariow:</label> <ul id="id_form-0-algorithmSem">
+            <p><label for="id_form-0-algorithmSem_0">Wybierz algorytm rekomendacji seminarium:</label> <ul id="id_form-0-algorithmSem">
             <li><label for="id_form-0-algorithmSem_0"><input id="id_form-0-algorithmSem_0" name="form-0-algorithmSem" type="checkbox" value="1" /> strategia wykorzystujaca algorytm lasow losowych</label></li>
             <li><label for="id_form-0-algorithmSem_1"><input id="id_form-0-algorithmSem_1" name="form-0-algorithmSem" type="checkbox" value="2" /> strategia najblizszych sasiadow</label></li>
             </ul>
         </p>
         <p>
-            <label for="id_markSubject">Wybierz przedmiot do predykcji oceny:</label><br/>
+            <label for="id_markSubject"><input id="id_markSubjectChecked" name="markSubjectChecked" type="checkbox" value="1" />Wybierz przedmiot do predykcji oceny:</label></br>
             <select id="id_markSubject" name="markSubject">
                 <option value="31">Zaawansowane systemy operacyjne</option>
                 <option value="32">Programowanie mikrokontrolerow</option>

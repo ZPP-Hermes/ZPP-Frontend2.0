@@ -75,6 +75,6 @@ def predictMark(marks, subject):
 def predictSubforSem(marks, sem):
     conn.r.gotMarks = marks
     conn.r.sem = sem
-    recommendSubjects = conn.r('recomNearestSubforSem(10, gotMarks, sem)')
+    recommendSubjects = conn.r('recomNearestSubforSem(5, gotMarks, sem)')
     recom = map(int, recommendSubjects)
     return recom
