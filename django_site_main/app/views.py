@@ -406,6 +406,7 @@ def gradesDynamic(request):
                                                     'recomSem': recommendSem,
                                                     'predMark': predMark,
                                                     'predMarkSub' : Course.objects.get(pk=selectedSub).name,
+                                                    'semSub' : Course.objects.get(pk=selectedSem).name,
                                                 })
             )
         return render(

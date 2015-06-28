@@ -82,7 +82,7 @@
 {% endif %}
 
 {% if isSelectedSem %}
-<h2> Przedmioty rekomendowane dla studenta i dla wybraengo seminarium </h2>
+<h2> Przedmioty rekomendowane dla seminarium {{ semSub }} </h2>
 <h3> Lista proponowanych przedmiotów: </h3>
 <ol>
     {% for name,url,avg,chance,proc,id_n,id_u in recomSub5 %}
