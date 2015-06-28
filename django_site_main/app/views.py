@@ -1,5 +1,7 @@
 # coding=utf-8
 from __future__ import division
+from django.core.exceptions import ObjectDoesNotExist
+
 """
 Definition of views.
 """
@@ -277,8 +279,9 @@ def gradesDynamic(request):
         if isselectedSem != 'true':
             isselectedSem = None
         print "selected sem => " + str(selectedSem)
+
         formset = MarkFormSet(request.POST, request.FILES)
-        if formset.is_valid():
+        if request.user.is_authenticated() or formset.is_valid():
             #defaultowe oceny: 3 z przedmiotu obowiazkowego i "brak" z przedmiotu obieralnego
             marks = [6]*30
             marks.extend([0]*20)
@@ -294,10 +297,23 @@ def gradesDynamic(request):
             #     selectedAlg = form.cleaned_data['algorithmSub']
             # if 'algorithmSem' in form.cleaned_data:
             #     selectedAlgSem = form.cleaned_data['algorithmSem']
-            for sbj in subjects:
-                for form in formset.forms:
-                    if sbj.id == int(form.cleaned_data['course'].id):
-                        marks[(sbj.id-1)] = int(form.cleaned_data['mark'])
+
+            ####################d
+            #dla zalogowanego
+            #####################
+            if request.user.is_authenticated():
+                for sbj in subjects:
+                    try:
+                        marks[(sbj.id-1)] = int(SavedMark.objects.get(user = request.user, course = sbj).mark)
+                    except ObjectDoesNotExist:
+                        pass
+
+
+            else:
+                for sbj in subjects:
+                    for form in formset.forms:
+                        if sbj.id == int(form.cleaned_data['course'].id):
+                            marks[(sbj.id-1)] = int(form.cleaned_data['mark'])
 
 
             selectedAlg = sub
@@ -421,17 +437,24 @@ def gradesDynamic(request):
                                                 'success': success
                                             })
         )
+    ########################################
+    # zalogowanemu nie wyswietlamy formatki wyboru oceny
+    ############################################
+    if request.user.is_authenticated():
+        formset = None
+    else:
+        formset = MarkFormSet()
     return render(
-        request,
-        'app/gradesDynamic.html',
-        context_instance=RequestContext(request,
-                                        {
-                                            'title': 'Oceny',
-                                            'message': 'Wprowadz dane',
-                                            'year': datetime.now().year,
-                                            'formset': MarkFormSet(),
-                                            'success': success
-                                        })
+    request,
+    'app/gradesDynamic.html',
+    context_instance=RequestContext(request,
+                                    {
+                                        'title': 'Oceny',
+                                        'message': 'Wprowadz dane',
+                                        'year': datetime.now().year,
+                                        'formset': formset,
+                                        'success': success
+                                    })
     )
 
 
