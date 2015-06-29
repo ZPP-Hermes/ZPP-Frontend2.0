@@ -152,6 +152,12 @@ img {
 	text-shadow: 1px 1px #000;
 	text-transform: uppercase;
 }
+.navigation li > span {
+	color: black;
+	font: bold 13px/24px Times, "Times New Roman", serif;
+	text-decoration: none;
+	text-transform: uppercase;
+}
 .navigation li.active > a, .navigation > a:hover {
 	color: #fff;
 }

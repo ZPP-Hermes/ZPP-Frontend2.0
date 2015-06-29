@@ -26,24 +26,18 @@
                 <li class="">
 					<a href="{% url 'app:edit_marks' %}">Edytuj oceny</a>
 				</li>
-       {% if user.is_authenticated %}
-<form id="logoutForm" action="{% url 'app:logout' %}" method="post" class="navbar-right">
-    {% csrf_token %}
 
-        <li><span class="navbar-brand">Hello {{ user.username }}!</span></li>
-        <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+				{% if user.is_authenticated %}
+				<li><span style="margin-left: 20px;">Zalogowano: {{ user.username }}</span></li>
+        		<li><a href="javascript:document.getElementById('logoutForm').submit()" style="color: #CC0000;">Log off</a></li>
 
-
-</form>
-
-{% else %}
-
-
-    <li><a href="{% url 'app:register' %}">Register</a></li>
-    <li><a href="{% url 'app:login' %}">Log in</a></li>
-
-
-{% endif %}
+				<form id="logoutForm" action="{% url 'app:logout' %}" method="post" class="navbar-right">
+					{% csrf_token %}
+				</form>
+				{% else %}
+				<li><a href="{% url 'app:register' %}">Register</a></li>
+				<li><a href="{% url 'app:login' %}">Log in</a></li>
+				{% endif %}
 
 			</ul>
 		</div>
