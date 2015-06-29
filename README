@@ -1,0 +1,4 @@
+init.sh - inicjowanie programu i instalowanie potrzebnych pakietów
+run.sh - uruchomienie serwera na localhost:8000
+
+po użyciu run.sh należy przejść do localhost:8000, przy pierwszym żądaniu występuje długi czas oczekiwania - wyliczane są modele predykcyjne w procesie Rserve
